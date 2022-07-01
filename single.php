@@ -30,10 +30,10 @@ if ( have_posts() ) :
                         <time datetime="<?php echo $fields['date']; ?>" pubdate> <?php echo $fields['date']; ?> </time>
                     </li>
                     <li> <?php
-				if ( $fields['miles']['rest_day'] ) :
+				if ( $fields['miles_and_elevation']['rest_day'] ) :
 					echo 'Rest Day';
 				else :
-					echo $fields['miles']['miles'] . ' miles';
+					echo $fields['miles_and_elevation']['miles'] . ' miles';
 				endif;
 					?> </li>
                     <li> <?php 
