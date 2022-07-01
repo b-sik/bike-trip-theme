@@ -56,19 +56,19 @@ endif;
 				</div>
 				<div class="col-6 d-flex flex-column align-items-end justify-content-center">
 					<ul class="list-unstyled m-0">
-						<li><?php echo $total_riding_days; ?> Riding Days</li>
-						<li><?php echo $total_miles; ?> Miles</li>
-						<li>&uarr; <?php echo $total_elev_gain; ?> ft &darr; <?php echo $total_elev_loss; ?> ft</li>
+						<li>🚴 <?php echo $total_riding_days; ?> Riding Days</li>
+						<li>🛣 <?php echo $total_miles; ?> Miles</li>
+						<li>🚵 &uarr; <?php echo $total_elev_gain; ?> ft &darr; <?php echo $total_elev_loss; ?> ft</li>
 						<li>
 						<?php
 						$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
-						echo $total_flats . ' ' . $flats_string
+						echo '⚠️ ' . $total_flats . ' ' . $flats_string
 						?>
 						</li>
 						<li>
 						<?php
 						$arg_string = intval( $total_arguments ) !== 1 ? 'Arguments' : 'Argument';
-						echo $total_arguments . ' ' . $arg_string;
+						echo '🗣 ' . $total_arguments . ' ' . $arg_string;
 						?>
 						</li>
 					</ul>
