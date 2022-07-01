@@ -21,67 +21,39 @@ $BsWp->get_template_parts(
 	)
 );
 
-function osm_shortcode( $gpx_filename ) {
-	return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="200" file_list="../../../../wp-content/uploads/2022/GPX/' . $gpx_filename . '.gpx" file_color_list="none" file_title="' . $gpx_filename . '.gpx"]';
-};
-
 function content_excerpt( $length ) {
 	$excerpt = get_the_excerpt();
 	$excerpt = substr( $excerpt, 0, $length ); // Only display first x characters of excerpt
 	$result  = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
 
 	ob_start();
-	?> <div class="px-2 pt-2 pb-1"> <?php echo $result . '...'; ?> </div> 
-	<?php
+	?> <div class="px-2 pt-2 pb-1"> <?php echo $result . '...'; ?> </div> <?php
 	return ob_get_clean();
 }
 
-?>
- <div class="container-fluid min-vh-100">
-	<div class="row">
-		<div class="d-none d-md-block col-3 my-3"> <?php get_search_form(); ?> 
-		<ul>
-			<?php
-			if ( have_posts() ) :
-			while ( have_posts() ) :
-				the_post();
-				?>
-			<li>
-			<a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
-					<?php the_title(); ?> </a>
-			</li>
-			<?php endwhile; ?>
-			<?php endif; ?>
-		</ul>
-	</div>
-		<div class="col-12 col-md-9 p-3"> 
-		<?php
+?> <div class="container-fluid min-vh-100 my-2">
+    <div class="row p-3"> <?php get_sidebar(); ?> <div class="col-12 col-md-9"> <?php
 
 		if ( have_posts() ) :
-			?>
-			 <div class="row g-2"> 
-			<?php
+			?> <div class="row g-2"> <?php
 			while ( have_posts() ) :
 				the_post();
-				?>
-				 <div class="col-12 col-md-6 col-lg-4">
-					<div class="container border h-100">
-						<h3>
-							<a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
-					<?php the_title(); ?> </a>
-						</h3>
-						<time datetime="<?php the_time( 'Y-m-d' ); ?>" pubdate> <?php the_date(); ?> </time>
-						<div class="mt-1">
-				<?php echo do_shortcode( osm_shortcode( get_field( 'gpx_filename', get_the_ID() ) ) ); ?>
-						</div> 
-						<?php echo content_excerpt( 100 ); ?>
-					</div>
-				</div> <?php endwhile; ?> <?php
+				?> <div class="col-12 col-md-6 col-lg-4">
+                    <div class="container border h-100">
+                        <h3>
+                            <a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
+                                <?php the_title(); ?> </a>
+                        </h3>
+                        <div class="mt-1">
+                            <?php echo do_shortcode( osm_shortcode( get_field( 'gpx_filename', get_the_ID() ), 200 ) ); ?>
+                        </div> <?php echo content_excerpt( 70 ); ?>
+                    </div>
+                </div> <?php endwhile; ?> <?php
 				else :
-					?>
-					 <h1> <?php echo __( 'Nothing to show yet.', 'wp_babobski' ); ?> </h1> <?php endif; ?> </div>
-		</div>
-	</div><?php
+					?> <h1> <?php echo __( 'Nothing to show yet.', 'wp_babobski' ); ?> </h1> <?php endif; ?> </div>
+        </div>
+    </div>
+</div><?php
 	$BsWp->get_template_parts(
 		array(
 			'parts/shared/footer',
