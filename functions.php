@@ -278,3 +278,9 @@
 	function osm_shortcode( $gpx_filename, $height ) {
 		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="../../../../wp-content/uploads/2022/GPX/' . $gpx_filename . '.gpx" file_color_list="none" file_title="' . $gpx_filename . '.gpx"]';
 	};
+
+	function allowed_block_types ( $block_editor_context, $editor_context ) {
+		return array('core/paragraph', 'core/heading', 'core/gallery', 'core/table', 'core/list', 'core/quote', 'core/video', 'core/separator');
+	}
+	 
+	add_filter( 'allowed_block_types_all', 'allowed_block_types', 10, 2 );

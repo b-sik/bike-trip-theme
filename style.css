@@ -7,3 +7,12 @@ Author: 		Babobski
 Author URI: 	https://www.babobski.nl
 Tags: 			babobski, bootstrap, basic theme
 */
+
+.wp-block-gallery {
+    margin: 0 auto !important;
+}
+
+.wp-block-image {
+    max-width: 160px !important;
+    max-height: 160px !important;
+}

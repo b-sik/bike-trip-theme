@@ -1,5 +1,6 @@
 <?php
 $header_image = get_field( 'header_image', get_page_by_title( 'Front Page' )->ID );
+$h_color = get_field( 'header_overlay_color', get_page_by_title( 'Front Page' )->ID );
 
 $total_riding_days = 0;
 $total_miles       = 0;
@@ -33,7 +34,7 @@ if ( $post_query->have_posts() ) :
 endif;
 ?>
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light" style="background-image:url(<?php echo $header_image; ?>);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2000px rgba(255, 0, 150, 0.9);">
+<nav class="navbar navbar-expand-sm navbar-light bg-light" style="background-image:url(<?php echo $header_image; ?>);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2000px rgba(<?php echo $h_color['red']; ?>, <?php echo $h_color['green']; ?>, <?php echo $h_color['blue']; ?>, 0.9);">
 	<div class="container-fluid">
 		<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryNav"
 			aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +89,6 @@ endif;
 				);
 				?>
 				 -->
-				<!-- <?php get_search_form(); ?> -->
 			</div>
 		</div>
 	</div>
