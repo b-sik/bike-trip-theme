@@ -60,7 +60,7 @@ endif;
 					<ul class="list-unstyled m-0">
 						<li>🚴 <?php echo $total_riding_days; ?> Riding Days</li>
 						<li>🛣 <?php echo $total_miles; ?> Miles</li>
-						<li>🚵 &uarr; <?php echo $total_elev_gain; ?> ft &darr; <?php echo $total_elev_loss; ?> ft</li>
+						<li>🚵 &uarr; <?php echo number_format($total_elev_gain); ?> ft &darr; <?php echo number_format($total_elev_loss); ?> ft</li>
 						<li>
 						<?php
 						$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
