@@ -274,7 +274,6 @@
 		}
 	}
 
-
 	function osm_shortcode( $gpx_filename, $height ) {
 		$upload_dir = wp_upload_dir();
 		$gpx_dir_url = $upload_dir['baseurl'] . '/2022/GPX/';
@@ -288,6 +287,8 @@
 	add_filter( 'allowed_block_types_all', 'allowed_block_types', 10, 2 );
 
 	if( function_exists('acf_add_local_field_group') ):
+
+		$front_page_id  = get_page_by_title('Front Page')->ID;
 
 		acf_add_local_field_group(array(
 			'key' => 'group_62a550dfcfe36',
@@ -307,8 +308,8 @@
 						'id' => '',
 					),
 					'show_in_graphql' => 1,
-					'display_format' => 'd/m/Y',
-					'return_format' => 'd/m/Y',
+					'display_format' => 'm/d/Y',
+					'return_format' => 'm/d/Y',
 					'first_day' => 1,
 				),
 				array(
@@ -578,7 +579,7 @@
 					array(
 						'param' => 'page',
 						'operator' => '==',
-						'value' => '39',
+						'value' => strval($front_page_id),
 					),
 				),
 			),
