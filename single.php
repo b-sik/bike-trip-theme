@@ -16,7 +16,7 @@ $BsWp->get_template_parts(
 		'parts/shared/header',
 	)
 );
-?><div class="content container-fluid my-2"> 
+?><div class="content container-fluid my-2" id="single-post"> 
 <?php
 if ( have_posts() ) :
 
