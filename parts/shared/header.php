@@ -1,6 +1,6 @@
 <?php
 $header_image = get_field( 'header_image', get_page_by_title( 'Front Page' )->ID );
-$h_color = get_field( 'header_overlay_color', get_page_by_title( 'Front Page' )->ID );
+$h_color      = get_field( 'header_overlay_color', get_page_by_title( 'Front Page' )->ID );
 
 $total_riding_days = 0;
 $total_miles       = 0;
@@ -8,6 +8,11 @@ $total_arguments   = 0;
 $total_elev_gain   = 0;
 $total_elev_loss   = 0;
 $total_flats       = 0;
+
+$all_gpx_file_names = '';
+$upload_dir         = wp_upload_dir();
+$gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
+$gpx_color_list = '';
 
 $args = array(
 	'post_type' => 'post',
@@ -19,6 +24,7 @@ if ( $post_query->have_posts() ) :
 	while ( $post_query->have_posts() ) :
 		$post_query->the_post();
 		$fields = get_fields();
+
 		if ( ! empty( $fields['arguments'] ) ) {
 			$total_arguments += intval( $fields['arguments'] );
 		}
@@ -30,9 +36,23 @@ if ( $post_query->have_posts() ) :
 			$total_elev_loss   += intval( $fields['miles_and_elevation']['elevation_loss'] );
 			$total_flats       += intval( $fields['miles_and_elevation']['flats'] );
 		}
+
+		if ( ! empty( $fields['gpx_filename'] ) ) {
+			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['gpx_filename'] . ',';
+			$gpx_color_list = $gpx_color_list . 'none,';
+		}
+
 	endwhile;
 endif;
+
+$all_gpx_file_names = rtrim($all_gpx_file_names, ',');
+$gpx_color_list = rtrim($gpx_color_list, ',');
 ?>
+
+
+
+
+
 
 <nav class="navbar navbar-expand navbar-light bg-light" style="background-image:url(<?php echo $header_image; ?>);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2000px rgba(<?php echo $h_color['red']; ?>, <?php echo $h_color['green']; ?>, <?php echo $h_color['blue']; ?>, 0.9);">
 	<div class="container-fluid">
@@ -60,7 +80,7 @@ endif;
 					<ul class="list-unstyled m-0">
 						<li>🚴 <?php echo $total_riding_days; ?> Riding Days</li>
 						<li>🛣 <?php echo $total_miles; ?> Miles</li>
-						<li>🚵 &uarr; <?php echo number_format($total_elev_gain); ?> ft &darr; <?php echo number_format($total_elev_loss); ?> ft</li>
+						<li>🚵 &uarr; <?php echo number_format( $total_elev_gain ); ?> ft &darr; <?php echo number_format( $total_elev_loss ); ?> ft</li>
 						<li>
 						<?php
 						$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
@@ -95,3 +115,13 @@ endif;
 		</div>
 	</div>
 </nav>
+
+<section class="container my-5">
+	<div class="row">
+				<div class="osm-wrapper">
+					<?php
+					echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
+					?>
+				</div>
+				</div>
+</section>
