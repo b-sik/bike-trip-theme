@@ -33,7 +33,7 @@ $BsWp->get_template_parts(
 			</div>
 		<?php endif; ?>
 
-		<div id="single-post-stats-bar" class="row mt-5">
+		<div id="single-post-stats-bar" class="row mt-5 mb-3">
 			<hr />
 			<ul class="d-flex justify-content-around list-unstyled">
 				<li>
