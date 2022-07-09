@@ -11,12 +11,6 @@ Array.from(blockquotes).forEach(blockquote => {
     blockquote.lastChild.classList.add('blockquote-footer');
 })
 
-const videos = document.getElementsByClassName('wp-block-video');
-Array.from(videos).forEach(video => {
-    video.classList.add('w-50', 'mx-auto');
-})
-
-
 jQuery(function($){
     // jQuery here
 });

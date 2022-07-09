@@ -17,7 +17,7 @@ $BsWp->get_template_parts(
 		'parts/shared/header',
 	)
 );
-?><div class="content container" id="single-post">
+?><div class="content container mb-5" id="single-post">
 	<?php
 	if ( have_posts() ) :
 		the_post();
@@ -54,9 +54,11 @@ $BsWp->get_template_parts(
 			<hr />
 		</div>
 		<h2 class="mb-3"> <?php the_title(); ?> </h2>
+		<div class="container">
 		<?php
 		the_content();
 		?>
+		</div>
 </div>
 <?php endif; ?>
 

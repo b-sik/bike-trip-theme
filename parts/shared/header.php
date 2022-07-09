@@ -37,7 +37,7 @@ endif;
 ?>
 
 <nav class="navbar navbar-expand navbar-light bg-light" style="background-image:url(<?php echo $header_image; ?>);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2000px rgba(<?php echo $h_color['red']; ?>, <?php echo $h_color['green']; ?>, <?php echo $h_color['blue']; ?>, 0.9);">
-	<div class="container-fluid">
+	<div class="container">
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="primaryNav">
 			<div class="offcanvas-body mx-4 py-3 flex-column flex-sm-row align-items-center">
 				<div class="col-12 col-sm-6 d-flex flex-column">

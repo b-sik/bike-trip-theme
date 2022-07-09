@@ -10,9 +10,28 @@ Tags: 			babobski, bootstrap, basic theme
 
 .wp-block-gallery {
     margin: 0 auto !important;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
+.wp-block-gallery::after {
+    content: "";
+    flex: auto;
+  }
+
 .wp-block-image {
-    max-width: 160px !important;
-    max-height: 160px !important;
+    max-width: 25% !important;
+    max-height: auto !important;
+}
+
+.wp-block-video {
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 30rem;
+}
+
+@media (max-width: 599px) {
+    .wp-block-image  {
+        max-width: 50% !important;
+    }
 }
