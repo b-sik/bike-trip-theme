@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main template file
  * This is the most generic template file in a WordPress theme
@@ -27,37 +28,47 @@ function content_excerpt( $length ) {
 	$result  = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
 
 	ob_start();
-	?> <div class="px-2 pt-2 pb-1"> <?php echo $result . '...'; ?> </div> <?php
+	?> <div class="px-2 pt-2 pb-1"> <?php echo $result . '...'; ?> </div>
+	<?php
 	return ob_get_clean();
 }
 
-?> <div class="container-fluid min-vh-100 my-2">
-    <div class="row p-3"> <?php get_sidebar(); ?> <div class="col-12 col-md-9"> <?php
+?>
+<div class="container-fluid min-vh-100 my-2">
+	<div class="row p-3"> <?php get_sidebar(); ?> <div class="col-12 col-md-9">
+			<?php
 
-		if ( have_posts() ) :
-			?> <div class="row g-2"> <?php
-			while ( have_posts() ) :
-				the_post();
-				?> <div class="col-12 col-md-6 col-lg-4">
-                    <div class="container border h-100">
-                        <h3>
-                            <a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
-                                <?php the_title(); ?> </a>
-                        </h3>
-                        <div class="mt-1">
-                            <?php echo do_shortcode( osm_shortcode( get_field( 'gpx_filename', get_the_ID() ), 200 ) ); ?>
-                        </div> <?php echo content_excerpt( 70 ); ?>
-                    </div>
-                </div> <?php endwhile; ?> <?php
+			if ( have_posts() ) :
+				?>
+				<div class="row g-2">
+					<?php
+					while ( have_posts() ) :
+						the_post();
+						?>
+						<div class="col-12 col-md-6 col-lg-4">
+							<div class="container border h-100">
+								<h3>
+									<a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
+										<?php the_title(); ?> </a>
+								</h3>
+								<div class="mt-1">
+									<?php echo do_shortcode( osm_shortcode( get_field( 'gpx_filename', get_the_ID() ), 200 ) ); ?>
+								</div> <?php echo content_excerpt( 70 ); ?>
+							</div>
+						</div>
+						<?php
+					endwhile;
 				else :
-					?> <h1> <?php echo __( 'Nothing to show yet.', 'wp_babobski' ); ?> </h1> <?php endif; ?> </div>
-        </div>
-    </div>
+					?>
+					<h1> <?php echo __( 'Nothing to show yet.', 'wp_babobski' ); ?> </h1> <?php endif; ?>
+				</div>
+		</div>
+	</div>
 </div><?php
-	$BsWp->get_template_parts(
-		array(
-			'parts/shared/footer',
-			'parts/shared/html-footer',
-		)
-	);
-	?>
+		$BsWp->get_template_parts(
+			array(
+				'parts/shared/footer',
+				'parts/shared/html-footer',
+			)
+		);
+		?>

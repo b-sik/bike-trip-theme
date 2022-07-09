@@ -12,7 +12,7 @@ $total_flats       = 0;
 $all_gpx_file_names = '';
 $upload_dir         = wp_upload_dir();
 $gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
-$gpx_color_list = '';
+$gpx_color_list     = '';
 
 $args = array(
 	'post_type' => 'post',
@@ -39,14 +39,14 @@ if ( $post_query->have_posts() ) :
 
 		if ( ! empty( $fields['gpx_filename'] ) ) {
 			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['gpx_filename'] . ',';
-			$gpx_color_list = $gpx_color_list . 'none,';
+			$gpx_color_list     = $gpx_color_list . 'none,';
 		}
 
 	endwhile;
 endif;
 
-$all_gpx_file_names = rtrim($all_gpx_file_names, ',');
-$gpx_color_list = rtrim($gpx_color_list, ',');
+$all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
+$gpx_color_list     = rtrim( $gpx_color_list, ',' );
 ?>
 
 
@@ -72,8 +72,8 @@ $gpx_color_list = rtrim($gpx_color_list, ',');
 						<a class="navbar-brand" href="<?php echo get_site_url(); ?>/">
 							<h1><?php echo get_bloginfo( 'name' ); ?></h1>
 						</a>
-					
-					<div class=""><small><?php echo get_bloginfo( 'description' ); ?></small></div>
+
+						<div class=""><small><?php echo get_bloginfo( 'description' ); ?></small></div>
 					</div>
 				</div>
 				<div class="col-12 col-sm-6 d-flex flex-column align-items-center align-items-sm-end justify-content-center text-center text-sm-start mt-4 mt-sm-0">
@@ -82,16 +82,16 @@ $gpx_color_list = rtrim($gpx_color_list, ',');
 						<li>🛣 <?php echo $total_miles; ?> Miles</li>
 						<li>🚵 &uarr; <?php echo number_format( $total_elev_gain ); ?> ft &darr; <?php echo number_format( $total_elev_loss ); ?> ft</li>
 						<li>
-						<?php
-						$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
-						echo '⚠️ ' . $total_flats . ' ' . $flats_string
-						?>
+							<?php
+							$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
+							echo '⚠️ ' . $total_flats . ' ' . $flats_string
+							?>
 						</li>
 						<li>
-						<?php
-						$arg_string = intval( $total_arguments ) !== 1 ? 'Arguments' : 'Argument';
-						echo '🗣 ' . $total_arguments . ' ' . $arg_string;
-						?>
+							<?php
+							$arg_string = intval( $total_arguments ) !== 1 ? 'Arguments' : 'Argument';
+							echo '🗣 ' . $total_arguments . ' ' . $arg_string;
+							?>
 						</li>
 					</ul>
 				</div>
@@ -118,10 +118,10 @@ $gpx_color_list = rtrim($gpx_color_list, ',');
 
 <section class="container my-5">
 	<div class="row">
-				<div class="osm-wrapper">
-					<?php
-					echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
-					?>
-				</div>
-				</div>
+		<div class="osm-wrapper">
+			<?php
+			echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
+			?>
+		</div>
+	</div>
 </section>
