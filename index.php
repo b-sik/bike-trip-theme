@@ -33,42 +33,65 @@ function content_excerpt( $length ) {
 	return ob_get_clean();
 }
 
-?>
-<div class="container-fluid min-vh-100 my-2">
-	<div class="row p-3"> <?php get_sidebar(); ?> <div class="col-12 col-md-9">
-			<?php
+$all_gpx_file_names = '';
+$upload_dir         = wp_upload_dir();
+$gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
+$gpx_color_list     = '';
 
-			if ( have_posts() ) :
-				?>
-				<div class="row g-2">
-					<?php
-					while ( have_posts() ) :
-						the_post();
-						?>
-						<div class="col-12 col-md-6 col-lg-4">
-							<div class="container border h-100">
-								<h3>
-									<a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
-										<?php the_title(); ?> </a>
-								</h3>
-								<div class="mt-1">
-									<?php echo do_shortcode( osm_shortcode( get_field( 'gpx_filename', get_the_ID() ), 200 ) ); ?>
-								</div> <?php echo content_excerpt( 70 ); ?>
-							</div>
-						</div>
-						<?php
-					endwhile;
-				else :
-					?>
-					<h1> <?php echo __( 'Nothing to show yet.', 'wp_babobski' ); ?> </h1> <?php endif; ?>
-				</div>
+if ( have_posts() ) :
+	while ( have_posts() ) :
+		the_post();
+		$fields = get_fields();
+		if ( ! empty( $fields['gpx_filename'] ) ) {
+			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['gpx_filename'] . ',';
+			$gpx_color_list     = $gpx_color_list . 'none,';
+		}
+	endwhile;
+endif;
+
+$all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
+$gpx_color_list     = rtrim( $gpx_color_list, ',' );
+?>
+
+<section id="osm_overview_map" class="container my-5">
+	<div class="row">
+		<div class="osm-wrapper">
+			<?php
+			echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
+			?>
 		</div>
 	</div>
-</div><?php
-		$BsWp->get_template_parts(
-			array(
-				'parts/shared/footer',
-				'parts/shared/html-footer',
-			)
-		);
+</section>
+<section id="all_posts" class="container min-vh-100 my-2">
+	<?php
+	if ( have_posts() ) :
 		?>
+		<div class="row g-2">
+			<?php
+			while ( have_posts() ) :
+				the_post();
+				?>
+				<div class="col-12 col-md-6 col-lg-4">
+					<div class="container border h-100">
+						<h3>
+							<a href="<?php esc_url( the_permalink() ); ?>" title="<?php the_title(); ?>" rel="bookmark">
+								<?php the_title(); ?> </a>
+						</h3>
+						<div class="mt-1">
+						</div> <?php echo content_excerpt( 70 ); ?>
+					</div>
+				</div>
+				<?php
+			endwhile;
+		endif;
+		?>
+		</div>
+</section>
+<?php
+$BsWp->get_template_parts(
+	array(
+		'parts/shared/footer',
+		'parts/shared/html-footer',
+	)
+);
+?>

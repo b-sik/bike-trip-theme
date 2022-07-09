@@ -9,11 +9,6 @@ $total_elev_gain   = 0;
 $total_elev_loss   = 0;
 $total_flats       = 0;
 
-$all_gpx_file_names = '';
-$upload_dir         = wp_upload_dir();
-$gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
-$gpx_color_list     = '';
-
 $args = array(
 	'post_type' => 'post',
 );
@@ -37,35 +32,13 @@ if ( $post_query->have_posts() ) :
 			$total_flats       += intval( $fields['miles_and_elevation']['flats'] );
 		}
 
-		if ( ! empty( $fields['gpx_filename'] ) ) {
-			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['gpx_filename'] . ',';
-			$gpx_color_list     = $gpx_color_list . 'none,';
-		}
-
 	endwhile;
 endif;
-
-$all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
-$gpx_color_list     = rtrim( $gpx_color_list, ',' );
 ?>
-
-
-
-
-
 
 <nav class="navbar navbar-expand navbar-light bg-light" style="background-image:url(<?php echo $header_image; ?>);background-size:cover;background-position:center;box-shadow:inset 0 0 0 2000px rgba(<?php echo $h_color['red']; ?>, <?php echo $h_color['green']; ?>, <?php echo $h_color['blue']; ?>, 0.9);">
 	<div class="container-fluid">
-		<!-- <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#primaryNav"
-			aria-controls="primaryNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button> -->
 		<div class="offcanvas offcanvas-start" tabindex="-1" id="primaryNav">
-			<!-- <div class="offcanvas-header">
-				<h5 class="offcanvas-title" id="offcanvasNavbarLabel"><?php echo get_bloginfo( 'name' ); ?></h5>
-				<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-					aria-label="Close"></button>
-			</div> -->
 			<div class="offcanvas-body mx-4 py-3 flex-column flex-sm-row align-items-center">
 				<div class="col-12 col-sm-6 d-flex flex-column">
 					<div class="row text-center text-sm-start">
@@ -95,33 +68,7 @@ $gpx_color_list     = rtrim( $gpx_color_list, ',' );
 						</li>
 					</ul>
 				</div>
-				<!-- 
-				<?php
-				wp_nav_menu(
-					array(
-						'menu'           => 'primary',
-						'theme_location' => 'primary',
-						'depth'          => 2,
-						'container'      => false,
-						'menu_class'     => 'navbar-nav justify-content-start flex-grow-1 pe-3',
-						'fallback_cb'    => '__return_false',
-						'walker'         => new bootstrap_5_wp_nav_menu_walker(),
-					)
-				);
-				?>
-				 -->
-
 			</div>
 		</div>
 	</div>
 </nav>
-
-<section class="container my-5">
-	<div class="row">
-		<div class="osm-wrapper">
-			<?php
-			echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
-			?>
-		</div>
-	</div>
-</section>
