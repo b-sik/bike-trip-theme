@@ -30,9 +30,15 @@ Tags: 			babobski, bootstrap, basic theme
     max-width: 30rem;
 }
 
-.card {
+.card:not(.intro-card) {
     height: 15rem;
     max-height: 15rem;
+    overflow: hidden;
+}
+
+.intro-card {
+    height: 20rem;
+    max-height: 20rem;
     overflow: hidden;
 }
 

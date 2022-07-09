@@ -22,8 +22,14 @@ $BsWp->get_template_parts(
 	)
 );
 
-function content_excerpt( $length ) {
-	$excerpt = get_the_excerpt();
+function content_excerpt( $length, $content = null ) {
+	$excerpt = '';
+	if ( $content ) {
+		$excerpt = $content;
+	} else {
+		$excerpt = get_the_excerpt();
+	}
+
 	$excerpt = substr( $excerpt, 0, $length ); // Only display first x characters of excerpt
 	$result  = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
 
@@ -50,6 +56,9 @@ $all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
 $gpx_color_list     = rtrim( $gpx_color_list, ',' );
 
 $fields = get_fields( get_page_by_title( 'Front Page' )->ID );
+
+$intro_post    = get_page_by_title( 'Intro' );
+$intro_content = apply_filters( 'the_content', $intro_post->post_content );
 ?>
 
 <section id="osm_overview_map" class="container my-5">
@@ -62,11 +71,26 @@ $fields = get_fields( get_page_by_title( 'Front Page' )->ID );
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 my-2">
-	<?php
-	if ( have_posts() ) :
-		?>
-		<div class="row g-2">
-			<?php
+	<div class="row g-2">
+
+		<?php if ( $intro_post ) : ?>
+			<div id="intro-post" class="col-12">
+				<div class="card intro-card bg-dark">
+					<a href="<?php esc_url( the_permalink( $intro_post->ID ) ); ?>" class="text-white text-center" title="<?php echo $intro_post->post_title; ?>" rel="bookmark">
+						<?php if ( ! empty( get_the_post_thumbnail_url( $intro_post->ID ) ) ) : ?>
+							<img class="card-img img-responsive" src="<?php echo get_the_post_thumbnail_url( $intro_post->ID ); ?>" alt="Card image">
+						<?php endif; ?>
+						<div class="card-img-overlay d-flex flex-column justify-content-between">
+							<?php echo content_excerpt( $fields['intro_excerpt_length'], $intro_content ); ?>
+						</div>
+					</a>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<?php
+		if ( have_posts() ) :
+
 			while ( have_posts() ) :
 				the_post();
 				?>
@@ -87,8 +111,8 @@ $fields = get_fields( get_page_by_title( 'Front Page' )->ID );
 				<?php
 			endwhile;
 		endif;
-	?>
-		</div>
+		?>
+	</div>
 </section>
 <?php
 $BsWp->get_template_parts(
