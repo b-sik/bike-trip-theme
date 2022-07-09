@@ -25,7 +25,7 @@ $BsWp->get_template_parts(
 		if ( ! empty( $fields['gpx_filename'] ) ) :
 			?>
 			<div class="row mt-5 justify-content-center">
-				<div class="osm-wrapper w-75">
+				<div class="osm-wrapper w-100">
 					<?php
 					echo do_shortcode( osm_shortcode( $fields['gpx_filename'], 300 ) );
 					?>
@@ -55,9 +55,9 @@ $BsWp->get_template_parts(
 		</div>
 		<h2 class="mb-3"> <?php the_title(); ?> </h2>
 		<div class="container">
-		<?php
-		the_content();
-		?>
+			<?php
+			the_content();
+			?>
 		</div>
 </div>
 <?php endif; ?>

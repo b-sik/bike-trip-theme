@@ -22,11 +22,10 @@ $BsWp->get_template_parts(
 	)
 );
 
-function content_excerpt($length)
-{
+function content_excerpt( $length ) {
 	$excerpt = get_the_excerpt();
-	$excerpt = substr($excerpt, 0, $length); // Only display first x characters of excerpt
-	$result  = substr($excerpt, 0, strrpos($excerpt, ' '));
+	$excerpt = substr( $excerpt, 0, $length ); // Only display first x characters of excerpt
+	$result  = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
 
 	return $result . '...';
 }
@@ -36,57 +35,59 @@ $upload_dir         = wp_upload_dir();
 $gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
 $gpx_color_list     = '';
 
-if (have_posts()) :
-	while (have_posts()) :
+if ( have_posts() ) :
+	while ( have_posts() ) :
 		the_post();
 		$fields = get_fields();
-		if (!empty($fields['gpx_filename'])) {
+		if ( ! empty( $fields['gpx_filename'] ) ) {
 			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['gpx_filename'] . ',';
 			$gpx_color_list     = $gpx_color_list . 'none,';
 		}
 	endwhile;
 endif;
 
-$all_gpx_file_names = rtrim($all_gpx_file_names, ',');
-$gpx_color_list     = rtrim($gpx_color_list, ',');
+$all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
+$gpx_color_list     = rtrim( $gpx_color_list, ',' );
+
+$fields = get_fields( get_page_by_title( 'Front Page' )->ID );
 ?>
 
 <section id="osm_overview_map" class="container my-5">
 	<div class="row">
 		<div class="osm-wrapper">
 			<?php
-			echo do_shortcode(osm_shortcode($all_gpx_file_names, 400, true, $gpx_color_list));
+			echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
 			?>
 		</div>
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 my-2">
 	<?php
-	if (have_posts()) :
-	?>
+	if ( have_posts() ) :
+		?>
 		<div class="row g-2">
 			<?php
-			while (have_posts()) :
+			while ( have_posts() ) :
 				the_post();
-			?>
+				?>
 				<div class="col-12 col-md-6">
 					<div class="card bg-dark">
-					<a href="<?php esc_url(the_permalink()); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
-					<?php if (!empty(get_the_post_thumbnail_url())) : ?>
-						<img class="card-img" src="<?php echo get_the_post_thumbnail_url() ?>" alt="Card image">
-						<?php endif; ?>
-						<div class="card-img-overlay d-flex flex-column justify-content-between">
-							<h5 class="card-title"> 
+						<a href="<?php esc_url( the_permalink() ); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
+							<?php if ( ! empty( get_the_post_thumbnail_url() ) ) : ?>
+								<img class="card-img" src="<?php echo get_the_post_thumbnail_url(); ?>" alt="Card image">
+							<?php endif; ?>
+							<div class="card-img-overlay d-flex flex-column justify-content-between">
+								<h5 class="card-title">
 									<?php the_title(); ?> </h5>
-							<p class="card-text"><?php echo content_excerpt(70); ?></p>
-						</div>
+								<p class="card-text"><?php echo content_excerpt( $fields['post_excerpt_length'] ); ?></p>
+							</div>
 						</a>
 					</div>
 				</div>
-		<?php
+				<?php
 			endwhile;
 		endif;
-		?>
+	?>
 		</div>
 </section>
 <?php

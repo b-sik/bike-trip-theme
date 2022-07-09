@@ -310,9 +310,9 @@ function allowed_block_types( $block_editor_context, $editor_context ) {
 
 add_filter( 'allowed_block_types_all', 'allowed_block_types', 10, 2 );
 
-if ( function_exists( 'acf_add_local_field_group' ) ) :
+$front_page_id = strval( get_page_by_title( 'Front Page' )->ID );
 
-	$front_page_id = get_page_by_title( 'Front Page' )->ID;
+if ( function_exists( 'acf_add_local_field_group' ) ) :
 
 	acf_add_local_field_group(
 		array(
@@ -333,8 +333,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 						'id'    => '',
 					),
 					'show_in_graphql'   => 1,
-					'display_format'    => 'm/d/Y',
-					'return_format'     => 'm/d/Y',
+					'display_format'    => 'd/m/Y',
+					'return_format'     => 'd/m/Y',
 					'first_day'         => 1,
 				),
 				array(
@@ -518,7 +518,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'label'             => 'GPX FIlename',
 					'name'              => 'gpx_filename',
 					'type'              => 'text',
-					'instructions'      => 'Include ".gpx"',
+					'instructions'      => 'Just the file name',
 					'required'          => 0,
 					'conditional_logic' => 0,
 					'wrapper'           => array(
@@ -600,13 +600,34 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 					'enable_opacity'    => 0,
 					'return_format'     => 'array',
 				),
+				array(
+					'key'               => 'field_62c9e8be22957',
+					'label'             => 'Post Excerpt Length',
+					'name'              => 'post_excerpt_length',
+					'type'              => 'number',
+					'instructions'      => 'Number of characters before \'...\'',
+					'required'          => 0,
+					'conditional_logic' => 0,
+					'wrapper'           => array(
+						'width' => '',
+						'class' => '',
+						'id'    => '',
+					),
+					'default_value'     => '',
+					'placeholder'       => '',
+					'prepend'           => '',
+					'append'            => '',
+					'min'               => '',
+					'max'               => '',
+					'step'              => '',
+				),
 			),
 			'location'              => array(
 				array(
 					array(
 						'param'    => 'page',
 						'operator' => '==',
-						'value'    => strval( $front_page_id ),
+						'value'    => $front_page_id,
 					),
 				),
 			),
