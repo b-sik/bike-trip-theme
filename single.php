@@ -22,12 +22,12 @@ $BsWp->get_template_parts(
 	if ( have_posts() ) :
 		the_post();
 		$fields = get_fields();
-		if ( ! empty( $fields['gpx_filename'] ) ) :
+		if ( ! empty( $fields['day_number'] ) &&  filter_var($fields['miles_and_elevation']['rest_day'], FILTER_VALIDATE_BOOLEAN) === false ) :
 			?>
 			<div class="row mt-5 justify-content-center">
 				<div class="osm-wrapper w-100">
 					<?php
-					echo do_shortcode( osm_shortcode( $fields['gpx_filename'], 300 ) );
+					echo do_shortcode( osm_shortcode( $fields['day_number'] . '.gpx', 300 ) );
 					?>
 				</div>
 			</div>
