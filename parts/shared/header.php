@@ -4,7 +4,6 @@ $h_color      = get_field( 'header_overlay_color', get_page_by_title( 'Front Pag
 
 $total_riding_days = 0;
 $total_miles       = 0;
-$total_arguments   = 0;
 $total_elev_gain   = 0;
 $total_elev_loss   = 0;
 $total_flats       = 0;
@@ -19,10 +18,6 @@ if ( $post_query->have_posts() ) :
 	while ( $post_query->have_posts() ) :
 		$post_query->the_post();
 		$fields = get_fields();
-
-		if ( ! empty( $fields['arguments'] ) ) {
-			$total_arguments += intval( $fields['arguments'] );
-		}
 
 		if ( ! $fields['miles_and_elevation']['rest_day'] ) {
 			$total_miles       += intval( $fields['miles_and_elevation']['miles'] );
@@ -58,12 +53,6 @@ endif;
 							<?php
 							$flats_string = intval( $total_flats ) !== 1 ? 'Flats' : 'Flat';
 							echo '⚠️ ' . $total_flats . ' ' . $flats_string
-							?>
-						</li>
-						<li>
-							<?php
-							$arg_string = intval( $total_arguments ) !== 1 ? 'Arguments' : 'Argument';
-							echo '🗣 ' . $total_arguments . ' ' . $arg_string;
 							?>
 						</li>
 					</ul>
