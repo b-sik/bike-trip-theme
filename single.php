@@ -39,17 +39,15 @@ $BsWp->get_template_parts(
 				<li>
 					<time datetime="<?php echo $fields['date']; ?>" pubdate> <?php echo $fields['date']; ?> </time>
 				</li>
-				<li>
-					<?php
-					if ( $fields['miles_and_elevation']['rest_day'] ) :
-						echo 'Rest Day';
-					else :
-						echo $fields['miles_and_elevation']['miles'] . ' Miles';
-						echo '</li><li>';
-						echo number_format( $fields['miles_and_elevation']['elevation_gain'] ) . ' ft Elevation Gain';
-						echo '</li>';
-					endif;
-					?>
+
+				<?php
+				if ( $fields['miles_and_elevation']['rest_day'] ) :
+					echo '<li>Rest Day</li>';
+				else :
+					echo $fields['miles_and_elevation']['miles'] . ' Miles';
+					echo '<li>↑ ' . number_format( $fields['miles_and_elevation']['elevation_gain'] ) . ' ft ↓ ' . number_format( $fields['miles_and_elevation']['elevation_loss'] ) . ' ft</li>';
+				endif;
+				?>
 			</ul>
 			<hr />
 		</div>
