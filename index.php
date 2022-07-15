@@ -22,16 +22,17 @@ $BsWp->get_template_parts(
 	)
 );
 
-function content_excerpt( $length, $content = null ) {
+function content_excerpt($length, $content = null)
+{
 	$excerpt = '';
-	if ( $content ) {
+	if ($content) {
 		$excerpt = $content;
 	} else {
 		$excerpt = get_the_excerpt();
 	}
 
-	$excerpt = substr( $excerpt, 0, $length ); // Only display first x characters of excerpt
-	$result  = substr( $excerpt, 0, strrpos( $excerpt, ' ' ) );
+	$excerpt = substr($excerpt, 0, $length); // Only display first x characters of excerpt
+	$result  = substr($excerpt, 0, strrpos($excerpt, ' '));
 
 	return $result . '...';
 }
@@ -40,32 +41,40 @@ $all_gpx_file_names = '';
 $upload_dir         = wp_upload_dir();
 $gpx_dir_url        = $upload_dir['baseurl'] . '/2022/GPX/';
 $gpx_color_list     = '';
+$gpx_color_options 	= array('blue', 'green', 'red', 'grey', 'black', 'purple', 'yellow', 'orange');
+$gpx_color_count 	= 0;
 
-if ( have_posts() ) :
-	while ( have_posts() ) :
+if (have_posts()) :
+	while (have_posts()) :
 		the_post();
 		$fields = get_fields();
-		if ( ! empty( $fields['day_number'] && filter_var($fields['miles_and_elevation']['rest_day'], FILTER_VALIDATE_BOOLEAN) === false) ) {
+		if (!empty($fields['day_number'] && filter_var($fields['miles_and_elevation']['rest_day'], FILTER_VALIDATE_BOOLEAN) === false)) {
 			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['day_number'] . '.gpx,';
-			$gpx_color_list     = $gpx_color_list . 'none,';
+
+			$gpx_color_list     = $gpx_color_list . $gpx_color_options[$gpx_color_count] . ',';
+
+			$gpx_color_count++;
+			if ($gpx_color_count > 7) {
+				$gpx_color_count = 0;
+			}
 		}
 	endwhile;
 endif;
 
-$all_gpx_file_names = rtrim( $all_gpx_file_names, ',' );
-$gpx_color_list     = rtrim( $gpx_color_list, ',' );
+$all_gpx_file_names = rtrim($all_gpx_file_names, ',');
+$gpx_color_list     = rtrim($gpx_color_list, ',');
 
-$fields = get_fields( get_page_by_title( 'Front Page' )->ID );
+$fields = get_fields(get_page_by_title('Front Page')->ID);
 
-$intro_post    = get_page_by_title( 'Intro' );
-$intro_content = apply_filters( 'the_content', $intro_post->post_content );
+$intro_post    = get_page_by_title('Intro');
+$intro_content = apply_filters('the_content', $intro_post->post_content);
 ?>
 
 <section id="osm_overview_map" class="container my-5">
 	<div class="row">
 		<div class="osm-wrapper">
 			<?php
-			echo do_shortcode( osm_shortcode( $all_gpx_file_names, 400, true, $gpx_color_list ) );
+			echo do_shortcode(osm_shortcode($all_gpx_file_names, 400, true, $gpx_color_list));
 			?>
 		</div>
 	</div>
@@ -73,15 +82,15 @@ $intro_content = apply_filters( 'the_content', $intro_post->post_content );
 <section id="all_posts" class="container min-vh-100 my-2">
 	<div class="row g-2">
 
-		<?php if ( $intro_post ) : ?>
+		<?php if ($intro_post) : ?>
 			<div id="intro-post" class="col-12">
 				<div class="card intro-card bg-dark">
-					<a href="<?php esc_url( the_permalink( $intro_post->ID ) ); ?>" class="text-white text-center" title="<?php echo $intro_post->post_title; ?>" rel="bookmark">
-						<?php if ( ! empty( get_the_post_thumbnail_url( $intro_post->ID ) ) ) : ?>
-							<img class="card-img img-responsive" src="<?php echo get_the_post_thumbnail_url( $intro_post->ID ); ?>" alt="Card image">
+					<a href="<?php esc_url(the_permalink($intro_post->ID)); ?>" class="text-white text-center" title="<?php echo $intro_post->post_title; ?>" rel="bookmark">
+						<?php if (!empty(get_the_post_thumbnail_url($intro_post->ID))) : ?>
+							<img class="card-img img-responsive" src="<?php echo get_the_post_thumbnail_url($intro_post->ID); ?>" alt="Card image">
 						<?php endif; ?>
 						<div class="card-img-overlay d-flex flex-column justify-content-between">
-							<?php echo content_excerpt( $fields['intro_excerpt_length'], $intro_content ); ?>
+							<?php echo content_excerpt($fields['intro_excerpt_length'], $intro_content); ?>
 						</div>
 					</a>
 				</div>
@@ -89,26 +98,26 @@ $intro_content = apply_filters( 'the_content', $intro_post->post_content );
 		<?php endif; ?>
 
 		<?php
-		if ( have_posts() ) :
+		if (have_posts()) :
 
-			while ( have_posts() ) :
+			while (have_posts()) :
 				the_post();
-				?>
+		?>
 				<div class="col-12 col-md-6">
 					<div class="card bg-dark">
-						<a href="<?php esc_url( the_permalink() ); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
-							<?php if ( ! empty( get_the_post_thumbnail_url() ) ) : ?>
+						<a href="<?php esc_url(the_permalink()); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
+							<?php if (!empty(get_the_post_thumbnail_url())) : ?>
 								<img class="card-img" src="<?php echo get_the_post_thumbnail_url(); ?>" alt="Card image">
 							<?php endif; ?>
 							<div class="card-img-overlay d-flex flex-column justify-content-between">
 								<h5 class="card-title">
 									<?php the_title(); ?> </h5>
-								<p class="card-text"><?php echo content_excerpt( $fields['post_excerpt_length'] ); ?></p>
+								<p class="card-text"><?php echo content_excerpt($fields['post_excerpt_length']); ?></p>
 							</div>
 						</a>
 					</div>
 				</div>
-				<?php
+		<?php
 			endwhile;
 		endif;
 		?>
