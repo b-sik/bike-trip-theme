@@ -23,7 +23,7 @@ $BsWp->get_template_parts(
 		the_post();
 		$fields = get_fields();
 
-		if ( ! empty( $fields['day_number'] ) && $fields['miles_and_elevation']['rest_day'] ) :
+		if ( ! empty( $fields['day_number'] ) && ! $fields['miles_and_elevation']['rest_day'] ) :
 			?>
 			<div class="row mt-5 justify-content-center">
 				<div class="osm-wrapper w-100">
