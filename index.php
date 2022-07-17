@@ -49,7 +49,7 @@ if (have_posts()) :
 		the_post();
 		$fields = get_fields();
 
-		if (!empty($fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'])) {
+		if (!empty($fields['day_number'] && !$fields['miles_and_elevation']['rest_day'])) {
 			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['day_number'] . '.gpx,';
 
 			$gpx_color_list     = $gpx_color_list . $gpx_color_options[$gpx_color_count] . ',';
@@ -71,9 +71,10 @@ $intro_post    = get_page_by_title('Intro');
 $intro_content = apply_filters('the_content', $intro_post->post_content);
 ?>
 
-<section id="osm_overview_map" class="container my-5">
-	<div class="row">
-		<div class="osm-wrapper">
+<section id="osm-overview-map" class="container-fluid py-5">
+	<div class="row justify-content-center">
+		<div class="osm-wrapper col-10 col-lg-8 text-center">
+			<h3 class="mb-4"><?php echo strtoupper('Track Our Progress'); ?></h3>
 			<?php
 			echo do_shortcode(osm_shortcode($all_gpx_file_names, 400, true, $gpx_color_list));
 			?>
@@ -81,9 +82,12 @@ $intro_content = apply_filters('the_content', $intro_post->post_content);
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 my-2">
-	<div class="row g-2">
-
-		<?php if ($intro_post) : ?>
+	<div class="row g-2 justify-content-center mt-3">
+		<div class="col-12 col-lg-10">	<h3 id="posts-header" class="text-center mt-5 mb-3"><?php echo strtoupper('Keeping Up With The Wheelie Babes'); ?></h3>
+		
+		<hr /></div>
+	
+		<!-- <?php if ($intro_post) : ?>
 			<div id="intro-post" class="col-12">
 				<div class="card intro-card bg-dark">
 					<a href="<?php esc_url(the_permalink($intro_post->ID)); ?>" class="text-white text-center" title="<?php echo $intro_post->post_title; ?>" rel="bookmark">
@@ -96,7 +100,7 @@ $intro_content = apply_filters('the_content', $intro_post->post_content);
 					</a>
 				</div>
 			</div>
-		<?php endif; ?>
+		<?php endif; ?> -->
 
 		<?php
 		if (have_posts()) :
@@ -104,7 +108,7 @@ $intro_content = apply_filters('the_content', $intro_post->post_content);
 			while (have_posts()) :
 				the_post();
 		?>
-				<div class="col-12 col-md-6">
+				<div class="col-12 col-md-6 col-lg-5">
 					<div class="card bg-dark">
 						<a href="<?php esc_url(the_permalink()); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
 							<?php if (!empty(get_the_post_thumbnail_url())) : ?>

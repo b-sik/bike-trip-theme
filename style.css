@@ -8,51 +8,116 @@ Author URI: 	https://www.babobski.nl
 Tags: 			babobski, bootstrap, basic theme
 */
 
+body {
+  font-family: 'Raleway', sans-serif;
+}
+
+.navbar-brand {
+    padding: 0 !important;
+}
+
+.navbar-brand h1 {
+    font-family: 'Lexend Mega', sans-serif;
+    font-weight: 800;
+    font-size: 4.875rem;
+    white-space: normal;
+    color: #FF8BFA;
+    text-shadow: 5px 4px 0px #7BF8F8;
+}
+
+@media (max-width: 991px) {
+    .navbar-brand h1 {
+        font-size: 4rem;
+    }
+  }
+
+#description {
+    color: #F5F5F5;
+    font-size: 1.5rem;
+}
+
+#total-stats {
+    font-family: 'Lexend Giga', sans-serif;
+    color: #F5F5F5;
+    font-size: 1.275rem;
+}
+
+.stats-header {
+    color: #7F9172;
+    border-color: #7F9172 !important;
+}
+
+@media (max-width: 480px) {
+    .navbar-brand h1 {
+        font-size: 3rem;
+    }
+    #total-stats {
+        font-size: 1.25rem;
+    }
+
+    #description {
+        font-size: 1.25rem;
+    }
+  }
+
+  #posts-header {
+    font-family: 'Lexend Mega', sans-serif;
+    font-weight: 500;
+    text-align: justify;
+  }
+
 .wp-block-gallery {
-    margin: 0 auto !important;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  margin: 0 auto !important;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .wp-block-gallery::after {
-    content: "";
-    flex: auto;
-  }
+  content: '';
+  flex: auto;
+}
 
 .wp-block-image {
-    max-width: 25% !important;
-    max-height: auto !important;
+  max-width: 25% !important;
+  max-height: auto !important;
 }
 
 .wp-block-video {
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 30rem;
+  margin: 0 auto;
+  max-height: 100%;
+  max-width: 30rem;
 }
 
 .card:not(.intro-card) {
-    height: 15rem;
-    max-height: 15rem;
-    overflow: hidden;
+  height: 15rem;
+  max-height: 15rem;
+  overflow: hidden;
 }
 
 .intro-card {
-    height: 20rem;
-    max-height: 20rem;
-    overflow: hidden;
+  height: 20rem;
+  max-height: 20rem;
+  overflow: hidden;
 }
 
 .card:hover {
-    transform: scale(1.02);
-    transition: all .2s ease-in-out;
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
 }
 
 .card-img-overlay {
-    background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 599px) {
-    .wp-block-image  {
-        max-width: 50% !important;
-    }
+  .wp-block-image {
+    max-width: 50% !important;
+  }
+}
+
+#osm-overview-map {
+    background: #333333;
+    color: #F5F5F5;
+    font-family: 'Lexend Mega', sans-serif;
+    font-weight: 500;
 }
