@@ -9,29 +9,40 @@
  *
  * Please see /external/bootsrap-utilities.php for info on BsWp::get_template_parts()
  *
- * @package 	WordPress
- * @subpackage 	Bootstrap 5.1.3
- * @autor 		Babobski
+ * @package     WordPress
+ * @subpackage  Bootstrap 5.1.3
+ * @autor       Babobski
  */
-$BsWp = new BsWp;
+$BsWp = new BsWp();
 
-$BsWp->get_template_parts([
-	'parts/shared/html-header', 
-	'parts/shared/header'
-]);
+$BsWp->get_template_parts(
+	array(
+		'parts/shared/html-header',
+		'parts/shared/header',
+	)
+);
 ?>
 
 <div class="container my-5">
-	<?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
+	<?php
+	if ( have_posts() ) {
+		while ( have_posts() ) :
+			the_post();
+			?>
 
-		<?php the_content(); ?>
+			<?php the_content(); ?>
 
-	<?php endwhile; ?>
+			<?php
+	endwhile;
+	};
+	?>
 </div>
 
-<?php 
-$BsWp->get_template_parts([
-	'parts/shared/footer',
-	'parts/shared/html-footer'
-]);
+<?php
+$BsWp->get_template_parts(
+	array(
+		'parts/shared/footer',
+		'parts/shared/html-footer',
+	)
+);
 ?>

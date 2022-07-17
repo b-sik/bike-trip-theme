@@ -7,9 +7,9 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>
-    <?php wp_title('|', true, 'right'); ?><?php bloginfo('name'); ?>
+	<?php wp_title( '|', true, 'right' ); ?><?php bloginfo( 'name' ); ?>
   </title>
-  <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+  <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
   <link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/images/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
