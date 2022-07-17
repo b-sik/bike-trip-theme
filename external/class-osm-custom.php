@@ -39,12 +39,14 @@ class OSM_Custom {
 	}
 
 	/**
-	 * All GPX filenames.
+	 * All GPX filenames and associated color list.
 	 *
-	 * @return string Comma separated string of all gpx filenames with upload path.
+	 * @return array
 	 */
-	public function all_gpx_filenames() {
-		$filenames = '';
+	public function all_gpx() {
+		$filenames  = '';
+		$color_list = '';
+		$count      = 0;
 
 		if ( have_posts() ) :
 			while ( have_posts() ) :
@@ -53,28 +55,6 @@ class OSM_Custom {
 
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
 					$filenames = $filenames . $this->gpx_uploads_dir_url() . $fields['day_number'] . '.gpx,';
-				}
-			endwhile;
-		endif;
-
-		return rtrim( $filenames, ',' );
-	}
-
-	/**
-	 * Color list for gpx segments.
-	 *
-	 * @return string Comma separated string of color list.
-	 */
-	public function all_gpx_files_color_list() {
-		$color_list = '';
-		$count      = '';
-
-		if ( have_posts() ) :
-			while ( have_posts() ) :
-				the_post();
-				$fields = get_fields();
-
-				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
 
 					$color_list = $color_list . $this->colors[ $count ] . ',';
 
@@ -86,8 +66,13 @@ class OSM_Custom {
 			endwhile;
 		endif;
 
-		return rtrim( $color_list, ',' );
+		$filenames  = rtrim( $filenames, ',' );
+		$color_list = rtrim( $color_list, ',' );
 
+		return array(
+			'filenames'  => $filenames,
+			'color_list' => $color_list,
+		);
 	}
 
 	/**
@@ -112,7 +97,8 @@ class OSM_Custom {
 	 * @return string OSM shortcode.
 	 */
 	public function shortcode_all( $height ) {
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $this->all_gpx_filenames() . '" file_color_list="' . $this->all_gpx_files_color_list() . '" file_title="' . $this->all_gpx_filenames() . '"]';
-	}
+		$all_gpx = $this->all_gpx();
 
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '"]';
+	}
 }
