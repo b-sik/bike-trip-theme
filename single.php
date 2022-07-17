@@ -22,7 +22,8 @@ $BsWp->get_template_parts(
 	if ( have_posts() ) :
 		the_post();
 		$fields = get_fields();
-		if ( ! empty( $fields['day_number'] ) &&  filter_var($fields['miles_and_elevation']['rest_day'], FILTER_VALIDATE_BOOLEAN) === false ) :
+
+		if ( ! empty( $fields['day_number'] ) && $fields['miles_and_elevation']['rest_day'] ) :
 			?>
 			<div class="row mt-5 justify-content-center">
 				<div class="osm-wrapper w-100">

@@ -48,7 +48,8 @@ if (have_posts()) :
 	while (have_posts()) :
 		the_post();
 		$fields = get_fields();
-		if (!empty($fields['day_number'] && filter_var($fields['miles_and_elevation']['rest_day'], FILTER_VALIDATE_BOOLEAN) === false)) {
+
+		if (!empty($fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'])) {
 			$all_gpx_file_names = $all_gpx_file_names . $gpx_dir_url . $fields['day_number'] . '.gpx,';
 
 			$gpx_color_list     = $gpx_color_list . $gpx_color_options[$gpx_color_count] . ',';
