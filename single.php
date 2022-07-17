@@ -24,14 +24,18 @@ $bs_wp->get_template_parts(
 	<?php
 	if ( have_posts() ) :
 		the_post();
-		$fields = get_fields();
+		$fields     = get_fields();
+		$day_number = $fields['day_number'];
+		$date       = $fields['date'];
+		$rest_day   = $fields['miles_and_elevation']['rest_day'];
+		$stats      = $fields['miles_and_elevation'];
 
-		if ( ! empty( $fields['day_number'] ) && ! $fields['miles_and_elevation']['rest_day'] ) {
+		if ( ! empty( $day_number ) && ! $rest_day ) {
 			?>
 			<div class="row mt-5 justify-content-center">
 				<div class="osm-wrapper w-100">
 					<?php
-					echo do_shortcode( $osm->shortcode( $fields['day_number'], 300 ) );
+					echo do_shortcode( $osm->shortcode( $day_number, 300 ) );
 					?>
 				</div>
 			</div>
@@ -41,15 +45,15 @@ $bs_wp->get_template_parts(
 			<hr />
 			<ul class="d-flex justify-content-around list-unstyled"> 
 				<li>
-					<time datetime="<?php echo esc_attr( $fields['date'] ); ?>" pubdate> <?php echo esc_html( $fields['date'] ); ?> </time>
+					<time datetime="<?php echo esc_attr( $date ); ?>" pubdate> <?php echo esc_html( $date ); ?> </time>
 				</li>
 
 				<?php
-				if ( $fields['miles_and_elevation']['rest_day'] ) {
+				if ( $rest_day ) {
 					echo '<li>Rest Day</li>';
 				} else {
-					echo esc_html( $fields['miles_and_elevation']['miles'] . ' Miles' );
-					echo '<li>↑ ' . number_format( $fields['miles_and_elevation']['elevation_gain'] ) . ' ft ↓ ' . number_format( $fields['miles_and_elevation']['elevation_loss'] ) . ' ft</li>';
+					echo esc_html( $stats['miles'] . ' Miles' );
+					echo '<li>↑ ' . number_format( $stats['elevation_gain'] ) . ' ft ↓ ' . number_format( $stats['elevation_loss'] ) . ' ft</li>';
 				}
 				?>
 			</ul>
@@ -62,13 +66,12 @@ $bs_wp->get_template_parts(
 			?>
 		</div>
 </div>
-<?php endif; ?>
+<?php endif;
 
-<?php
-$bs_wp->get_template_parts(
-	array(
-		'parts/shared/footer',
-		'parts/shared/html-footer',
-	)
-);
-?>
+	$bs_wp->get_template_parts(
+		array(
+			'parts/shared/footer',
+			'parts/shared/html-footer',
+		)
+	);
+	?>

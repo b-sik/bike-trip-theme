@@ -100,7 +100,7 @@ class OSM_Custom {
 	 * @return string OSM shortcode.
 	 */
 	public function shortcode( $filename, $height, $file_color_list = 'none' ) {
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $filename . '.gpx" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $this->gpx_uploads_dir_url() . $filename . '.gpx" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
 	}
 
 
