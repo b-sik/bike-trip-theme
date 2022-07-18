@@ -36,8 +36,8 @@ $bs_wp->get_template_parts(
 
 		if ( ! empty( $day_number ) && ! $rest_day ) {
 			?>
-			<div class="row mt-5 justify-content-center">
-				<div class="osm-wrapper w-100">
+			<div class="row mt-5">
+				<div class="osm-wrapper col-10 offset-1">
 					<?php
 					echo do_shortcode( $osm->shortcode( $day_number, 300 ) );
 					?>
@@ -46,40 +46,46 @@ $bs_wp->get_template_parts(
 		<?php } ?>
 
 		<div id="single-post-stats-bar" class="row mt-5 mb-3">
-			<hr />
-			<ul class="d-flex justify-content-around list-unstyled"> 
-				<li>
-					<time datetime="<?php echo esc_attr( $date ); ?>" pubdate> <?php echo esc_html( $date ); ?> </time>
-				</li>
+			<div class="col-10 offset-1">
+				<hr />
+				<ul class="d-flex justify-content-around list-unstyled"> 
+					<li>
+						<time datetime="<?php echo esc_attr( $date ); ?>" pubdate> <?php echo esc_html( $date ); ?> </time>
+					</li>
 
-				<?php
-				if ( $rest_day ) {
-					echo '<li>Rest Day</li>';
-				} else {
-					echo esc_html( $stats['miles'] . ' Miles' );
-					echo '<li>↑ ' . number_format( $stats['elevation_gain'] ) . ' ft ↓ ' . number_format( $stats['elevation_loss'] ) . ' ft</li>';
-				}
-				?>
-			</ul>
-			<hr />
+					<?php
+					if ( $rest_day ) {
+						echo '<li>Rest Day</li>';
+					} else {
+						echo esc_html( $stats['miles'] . ' Miles' );
+						echo '<li>↑ ' . number_format( $stats['elevation_gain'] ) . ' ft ↓ ' . number_format( $stats['elevation_loss'] ) . ' ft</li>';
+					}
+					?>
+				</ul>
+				<hr />
+			</div>
 		</div>
 		<div class="container">
-			<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
+			<div class="row">
+				<div class="col-10 offset-1">
+					<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
 
-			<?php if ( $is_single_loc ) { ?>
-				<h3>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
-			<?php } else { ?>
-				<h3>
-					<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
-				</h3>
-			<?php } ?>
+					<?php if ( $is_single_loc ) { ?>
+						<h3>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
+					<?php } else { ?>
+						<h3>
+							<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
+						</h3>
+					<?php } ?>
 
-			<h6 class="mt-4">WEATHER: <?php echo esc_html( strtoupper( $weather ) ); ?></h6>
+					<h6 class="mt-4">WEATHER: <?php echo esc_html( strtoupper( $weather ) ); ?></h6>
 
-			<div class="post-content-wrapper mt-5">
-				<?php
-				the_content();
-				?>
+					<div class="post-content-wrapper mt-5">
+						<?php
+						the_content();
+						?>
+					</div>
+				</div>
 			</div>
 		</div>
 </div>

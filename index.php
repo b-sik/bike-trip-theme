@@ -31,7 +31,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 <section id="osm-overview-map" class="container-fluid d-flex min-vh-100 align-items-center">
 	<div class="row justify-content-center w-100">
 		<div class="osm-wrapper col-10 col-lg-8 text-center">
-			<h3 class="mb-4"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
+			<h3 class="mb-5 pb-3"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
 			<?php
 			echo do_shortcode( $osm->shortcode_all( 400 ) );
 			?>
@@ -64,13 +64,13 @@ $post_excerpt_length = $fields['post_excerpt_length']
 								<h4 class="card-title">
 									<span class="d-block">DAY <?php echo esc_html( $day_number ); ?>:</span>
 
-									<?php if ( $is_single_loc ) : ?>
+									<?php if ( $is_single_loc ) { ?>
 									<span>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></span>
-									<?php else : ?>
+									<?php } else { ?>
 										<span>
 											<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
 										</span>
-									<?php endif; ?> 
+									<?php }; ?> 
 								</h4>
 
 								<p class="card-text mt-2">
