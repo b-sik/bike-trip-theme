@@ -13,7 +13,7 @@
   <link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/images/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga&family=Lexend+Mega:wght@500;800&family=Raleway:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga&family=Lexend+Mega:wght@500;800&family=Raleway:wght@300;500&display=swap" rel="stylesheet">
   <?php wp_head(); ?>
 </head>
 

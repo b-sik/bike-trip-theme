@@ -66,6 +66,10 @@ body {
     text-align: justify;
   }
 
+#post-content-wrapper {
+  font-weight: 300;
+}
+
 .wp-block-gallery {
   margin: 0 auto !important;
   justify-content: space-between;

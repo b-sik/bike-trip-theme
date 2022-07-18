@@ -30,16 +30,16 @@ $post_excerpt_length = $fields['post_excerpt_length']
 
 <section id="osm-overview-map" class="container-fluid d-flex min-vh-100 align-items-center">
 	<div class="row justify-content-center w-100">
-		<div class="osm-wrapper col-10 col-lg-8 text-center">
+		<div class="osm-wrapper col-11 col-md-10 text-center">
 			<h3 class="mb-5 pb-3"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
 			<?php
-			echo do_shortcode( $osm->shortcode_all( 400 ) );
+			echo do_shortcode( $osm->shortcode_all( 450 ) );
 			?>
 		</div>
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 mt-2 mb-5">
-	<div class="row g-5 justify-content-center mt-3">
+	<div class="row g-4 g-lg-5 justify-content-center mt-3">
 		<div class="col-12 col-lg-10">	
 			<h3 id="posts-header" class="text-center mt-5 mb-3"><?php echo esc_html( strtoupper( 'Keeping Up With The Wheelie Babes' ) ); ?></h3>
 		<hr />

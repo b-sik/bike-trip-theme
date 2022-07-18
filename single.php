@@ -37,7 +37,7 @@ $bs_wp->get_template_parts(
 		if ( ! empty( $day_number ) && ! $rest_day ) {
 			?>
 			<div class="row mt-5">
-				<div class="osm-wrapper col-10 offset-1">
+				<div class="osm-wrapper col-12 col-lg-10 offset-lg-1">
 					<?php
 					echo do_shortcode( $osm->shortcode( $day_number, 300 ) );
 					?>
@@ -46,7 +46,7 @@ $bs_wp->get_template_parts(
 		<?php } ?>
 
 		<div id="single-post-stats-bar" class="row mt-5 mb-3">
-			<div class="col-10 offset-1">
+			<div class="col-12 col-lg-10 offset-lg-1">
 				<hr />
 				<ul class="d-flex justify-content-around list-unstyled"> 
 					<li>
@@ -67,7 +67,7 @@ $bs_wp->get_template_parts(
 		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-10 offset-1">
+				<div class="col-12 col-lg-10 offset-lg-1">
 					<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
 
 					<?php if ( $is_single_loc ) { ?>
@@ -80,7 +80,7 @@ $bs_wp->get_template_parts(
 
 					<h6 class="mt-4">WEATHER: <?php echo esc_html( strtoupper( $weather ) ); ?></h6>
 
-					<div class="post-content-wrapper mt-5">
+					<div id="post-content-wrapper" class="mt-5">
 						<?php
 						the_content();
 						?>
