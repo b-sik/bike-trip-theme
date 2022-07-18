@@ -38,7 +38,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 		</div>
 	</div>
 </section>
-<section id="all_posts" class="container min-vh-100 my-2">
+<section id="all_posts" class="container min-vh-100 mt-2 mb-5">
 	<div class="row g-5 justify-content-center mt-3">
 		<div class="col-12 col-lg-10">	
 			<h3 id="posts-header" class="text-center mt-5 mb-3"><?php echo esc_html( strtoupper( 'Keeping Up With The Wheelie Babes' ) ); ?></h3>
