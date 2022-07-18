@@ -24,11 +24,15 @@ $bs_wp->get_template_parts(
 	<?php
 	if ( have_posts() ) :
 		the_post();
-		$fields     = get_fields();
-		$day_number = $fields['day_number'];
-		$date       = $fields['date'];
-		$rest_day   = $fields['miles_and_elevation']['rest_day'];
-		$stats      = $fields['miles_and_elevation'];
+		$fields        = get_fields();
+		$day_number    = $fields['day_number'];
+		$date          = $fields['date'];
+		$weather       = $fields['weather'];
+		$start_loc     = $fields['locations']['start'];
+		$is_single_loc = $fields['locations']['single'];
+		$end_loc       = $fields['locations']['end'];
+		$rest_day      = $fields['miles_and_elevation']['rest_day'];
+		$stats         = $fields['miles_and_elevation'];
 
 		if ( ! empty( $day_number ) && ! $rest_day ) {
 			?>
@@ -59,11 +63,24 @@ $bs_wp->get_template_parts(
 			</ul>
 			<hr />
 		</div>
-		<h2 class="mb-3"> <?php the_title(); ?> </h2>
 		<div class="container">
-			<?php
-			the_content();
-			?>
+			<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
+
+			<?php if ( $is_single_loc ) { ?>
+				<h3>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
+			<?php } else { ?>
+				<h3>
+					<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
+				</h3>
+			<?php } ?>
+
+			<h6 class="mt-4">WEATHER: <?php echo esc_html( strtoupper( $weather ) ); ?></h6>
+
+			<div class="post-content-wrapper mt-5">
+				<?php
+				the_content();
+				?>
+			</div>
 		</div>
 </div>
 <?php endif;
