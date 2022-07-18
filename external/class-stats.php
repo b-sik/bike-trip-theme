@@ -53,6 +53,7 @@ class Stats {
 		return array(
 			'riding_days' => $riding_days,
 			'miles'       => $miles,
+			'avg_miles'   => number_format( $miles / $riding_days, 2 ),
 			'elev_gain'   => $elev_gain,
 			'elev_loss'   => $elev_loss,
 			'flats'       => $flats,

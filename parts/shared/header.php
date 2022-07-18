@@ -23,8 +23,9 @@ $stats = $stats->total_stats();
 							<?php echo esc_html( strtoupper( 'Current Riding Stats' ) ); ?>
 						</li>
 						<li><?php echo esc_html( $stats['riding_days'] ); ?> riding days</li>
-						<li class="my-3"><?php echo esc_html( $stats['miles'] ); ?> miles</li>
-						<li class="my-3">&uarr; <?php echo number_format( $stats['elev_gain'] ); ?> ft &darr; <?php echo number_format( $stats['elev_loss'] ); ?> ft</li>
+						<li class="my-2"><?php echo esc_html( $stats['miles'] ); ?> miles</li>
+						<li class="my-2"><?php echo esc_html( $stats['avg_miles'] ); ?> miles per day</li>
+						<li class="my-2">&uarr; <?php echo number_format( $stats['elev_gain'] ); ?> ft &darr; <?php echo number_format( $stats['elev_loss'] ); ?> ft</li>
 						<li>
 							<?php
 							$flats_string = intval( $stats['flats'] ) !== 1 ? 'flats' : 'flat';

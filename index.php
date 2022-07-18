@@ -28,8 +28,8 @@ $fields              = get_fields( get_page_by_title( 'Front Page' )->ID );
 $post_excerpt_length = $fields['post_excerpt_length']
 ?>
 
-<section id="osm-overview-map" class="container-fluid py-5">
-	<div class="row justify-content-center">
+<section id="osm-overview-map" class="container-fluid d-flex min-vh-100 align-items-center">
+	<div class="row justify-content-center w-100">
 		<div class="osm-wrapper col-10 col-lg-8 text-center">
 			<h3 class="mb-4"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
 			<?php
