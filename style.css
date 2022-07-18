@@ -88,15 +88,9 @@ body {
   max-width: 30rem;
 }
 
-.card:not(.intro-card) {
+.card {
   height: 15rem;
   max-height: 15rem;
-  overflow: hidden;
-}
-
-.intro-card {
-  height: 20rem;
-  max-height: 20rem;
   overflow: hidden;
 }
 
@@ -105,8 +99,16 @@ body {
   transition: all 0.2s ease-in-out;
 }
 
+.card-text {
+  line-height: 1.1;
+}
+
 .card-img-overlay {
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+#read-more {
+  color: #DC602E !important;
 }
 
 @media (max-width: 599px) {

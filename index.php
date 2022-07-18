@@ -24,7 +24,8 @@ $bs_wp->get_template_parts(
 	)
 );
 
-$fields = get_fields( get_page_by_title( 'Front Page' )->ID );
+$fields              = get_fields( get_page_by_title( 'Front Page' )->ID );
+$post_excerpt_length = $fields['post_excerpt_length']
 ?>
 
 <section id="osm-overview-map" class="container-fluid py-5">
@@ -45,26 +46,40 @@ $fields = get_fields( get_page_by_title( 'Front Page' )->ID );
 
 		<?php
 		if ( have_posts() ) :
-
 			while ( have_posts() ) :
 				the_post();
+				$post_fields   = get_fields();
+				$day_number    = $post_fields['day_number'];
+				$start_loc     = $post_fields['locations']['start'];
+				$is_single_loc = $post_fields['locations']['single'];
+				$end_loc       = $post_fields['locations']['end'];
 				?>
 				<div class="col-12 col-md-6 col-lg-5">
 					<div class="card bg-dark">
-						<a href="<?php esc_url( the_permalink() ); ?>" class="text-white" title="<?php the_title(); ?>" rel="bookmark">
+						<a href="<?php esc_url( the_permalink() ); ?>" class="text-white text-decoration-none" title="<?php the_title(); ?>" rel="bookmark">
 							<?php if ( ! empty( get_the_post_thumbnail_url() ) ) : ?>
 								<img class="card-img" src="<?php echo esc_attr( get_the_post_thumbnail_url() ); ?>" alt="Card image">
 							<?php endif; ?>
-							<div class="card-img-overlay d-flex flex-column justify-content-between">
-								<h5 class="card-title">
-									<?php the_title(); ?> </h5>
-								<p class="card-text"><?php echo esc_html( $util->content_excerpt( $fields['post_excerpt_length'] ) ); ?></p>
+							<div class="card-img-overlay d-flex flex-column justify-content-start">
+								<h4 class="card-title">
+									<span class="d-block">DAY <?php echo esc_html( $day_number ); ?>:</span>
+
+									<?php if ( $is_single_loc ) : ?>
+									<span>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></span>
+									<?php else : ?>
+										<span><?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?></span>
+									<?php endif; ?> 
+								</h4>
+
+								<p class="card-text mt-2"><?php echo esc_html( $util->content_excerpt( $post_excerpt_length ) ); ?></p>
+
+								<p class="justify-self-end align-self-end mt-auto mb-0"><a id="read-more" href="<?php esc_url( the_permalink() ); ?>" class='text-decoration-none'>READ MORE</a></p>
 							</div>
 						</a>
 					</div>
 				</div>
 				<?php
-			endwhile;
+				endwhile;
 		endif;
 		?>
 	</div>
