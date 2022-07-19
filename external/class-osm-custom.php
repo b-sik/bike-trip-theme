@@ -59,7 +59,8 @@ class OSM_Custom {
 					$color_list = $color_list . $this->colors[ $count ] . ',';
 
 					$count++;
-					if ( $count > count( $this->colors ) ) {
+					if ( $count > count( $this->colors ) - 1 ) {
+
 						$count = 0;
 					}
 				}
