@@ -39,6 +39,37 @@ class OSM_Custom {
 	}
 
 	/**
+	 * Check if file exists on server.
+	 *
+	 * @param string $filename Complete URL of file.
+	 * @return bool
+	 */
+	public function file_url_exists( $filename ) {
+		$file = @fopen( $filename, 'r' );
+		return $file ? true : false;
+	}
+
+	/**
+	 * Create entire filename within directory.
+	 *
+	 * @param string $name File name.
+	 * @return string
+	 */
+	public function make_gpx_filename( $name ) {
+		return $this->gpx_uploads_dir_url() . $name . '.gpx';
+	}
+
+	/**
+	 * Check if gpx file exists.
+	 *
+	 * @param string $name File name without directory or extension.
+	 * @return bool
+	 */
+	public function gpx_file_exists( $name ) {
+		return $this->file_url_exists( $this->make_gpx_filename( $name ) );
+	}
+
+	/**
 	 * All GPX filenames and associated color list.
 	 *
 	 * @return array
@@ -54,14 +85,17 @@ class OSM_Custom {
 				$fields = get_fields();
 
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
-					$filenames = $filenames . $this->gpx_uploads_dir_url() . $fields['day_number'] . '.gpx,';
+					$filename = $this->make_gpx_filename( $fields['day_number'] );
 
-					$color_list = $color_list . $this->colors[ $count ] . ',';
+					if ( $this->file_url_exists( $filename ) ) {
+						$filenames = $filenames . $filename . ',';
 
-					$count++;
-					if ( $count > count( $this->colors ) - 1 ) {
+						$color_list = $color_list . $this->colors[ $count ] . ',';
 
-						$count = 0;
+						$count++;
+						if ( $count > count( $this->colors ) - 1 ) {
+							$count = 0;
+						}
 					}
 				}
 			endwhile;
@@ -79,14 +113,14 @@ class OSM_Custom {
 	/**
 	 * Generate OSM plugin shortcode with single gpx filepath.
 	 *
-	 * @param string           $filename Filename, sans extension.
+	 * @param string           $filename Full filename and URL path.
 	 * @param int|string       $height Map height.
 	 * @param string (optonal) $file_color_list Segment color.
 	 *
 	 * @return string OSM shortcode.
 	 */
 	public function shortcode( $filename, $height, $file_color_list = 'none' ) {
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $this->gpx_uploads_dir_url() . $filename . '.gpx" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $filename . '" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
 	}
 
 

@@ -34,12 +34,12 @@ $bs_wp->get_template_parts(
 		$rest_day      = $fields['miles_and_elevation']['rest_day'];
 		$stats         = $fields['miles_and_elevation'];
 
-		if ( ! empty( $day_number ) && ! $rest_day ) {
+		if ( ! empty( $day_number ) && ! $rest_day && $osm->gpx_file_exists( $day_number ) ) {
 			?>
 			<div class="row mt-5">
 				<div class="osm-wrapper col-12 col-lg-10 offset-lg-1">
 					<?php
-					echo do_shortcode( $osm->shortcode( $day_number, 300 ) );
+					echo do_shortcode( $osm->shortcode( $osm->make_gpx_filename( $day_number ), 300 ) );
 					?>
 				</div>
 			</div>
