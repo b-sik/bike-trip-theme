@@ -12,6 +12,16 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
+a:link,
+a:visited {
+  color: #7BF8F8;
+}
+
+a:hover,
+a:active {
+  color: #FF8BFA;
+}
+
 .navbar-brand {
     padding: 0 !important;
 }
@@ -68,6 +78,10 @@ body {
 
 #post-content-wrapper {
   font-weight: 300;
+}
+
+.venmo-text {
+  letter-spacing: -1px;
 }
 
 .wp-block-gallery {
