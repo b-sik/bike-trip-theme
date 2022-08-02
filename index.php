@@ -36,7 +36,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 			echo do_shortcode( $osm->shortcode_all( 450 ) );
 			?>
 		</div>
-		<p class="venmo-text pt-4 text-center">Help the Wheelie Babes stay fueled by <a href="https://venmo.com/?txn=pay&audience=friends&recipients=@Eric-Svenson&amount=5.00&note=Wheelie%20Babe%20Breakfast%20Sandwich" target="_blank" rel="noopener noreferrer">buying them a breakfast sandwich</a>!</p>
+		<p class="venmo-text pt-4 text-center">Help the Wheelie Babes stay fueled by <a href="https://venmo.com/?txn=pay&audience=friends&recipients=svenericson@gmail.com&amount=5.00&note=Wheelie%20Babes%20Breakfast%20Sandwich" target="_blank" rel="noopener noreferrer">buying them a breakfast sandwich</a>!</p>
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 mt-2 mb-5">
