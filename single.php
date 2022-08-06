@@ -9,8 +9,9 @@
  * @autor       Babobski
  */
 
-$bs_wp = new BsWp();
-$osm   = new OSM_Custom();
+$bs_wp        = new BsWp();
+$osm          = new OSM_Custom();
+$post_content = new Post_Content();
 
 $bs_wp->get_template_parts(
 	array(
@@ -82,7 +83,8 @@ $bs_wp->get_template_parts(
 
 					<div id="post-content-wrapper" class="mt-5">
 						<?php
-						the_content();
+						// the_content();
+						$post_content->echo_content();
 						?>
 					</div>
 				</div>

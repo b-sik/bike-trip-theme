@@ -38,6 +38,7 @@ require_once 'external/bs5navwalker.php';
 require_once 'external/class-osm-custom.php';
 require_once 'external/class-utilities.php';
 require_once 'external/class-stats.php';
+require_once 'external/class-post-content.php';
 
 /*
 	 ========================================================================================================================

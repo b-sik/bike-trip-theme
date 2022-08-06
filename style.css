@@ -104,7 +104,7 @@ a:active {
   margin: 0 auto;
   max-height: 100%;
   max-width: 30rem;
-}
+} */
 
 .card {
   height: 15rem;
@@ -129,15 +129,28 @@ a:active {
   color: #DC602E !important;
 }
 
-@media (max-width: 599px) {
-  .wp-block-image {
-    max-width: 50% !important;
-  }
-}
-
 #osm-overview-map {
     background: #333333;
     color: #F5F5F5;
     font-family: 'Lexend Mega', sans-serif;
     font-weight: 500;
+}
+
+#post-content-wrapper p {
+  font-size: 1.2rem;
+}
+
+#post-content-wrapper figcaption {
+  text-align: center;
+  font-size: .8rem;
+}
+
+figure {
+  height: 100%;
+  width: 100%;
+}
+
+img {
+  height: 100% !important;
+  object-fit: cover;
 }
