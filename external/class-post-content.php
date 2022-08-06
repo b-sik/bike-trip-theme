@@ -37,15 +37,16 @@ class Post_Content {
 		foreach ( $blocks as $block ) {
 			$blocks_in_queue = array_column( $block_queue, 'blockName' );
 
-			// make sure to echo last block.
-			if ( $total_blocks === $count ) {
-				array_push( $block_queue, $block );
-				$this->output_blocks_with_layouts( $block_queue );
-			} elseif ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
+			if ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
 				$this->output_blocks_with_layouts( $block_queue );
 				$block_queue = array( $block );
 			} else {
 				array_push( $block_queue, $block );
+			}
+
+			// make sure to echo last block.
+			if ( $total_blocks === $count ) {
+				$this->output_blocks_with_layouts( $block_queue );
 			}
 
 			$count++;
