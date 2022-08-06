@@ -142,11 +142,11 @@ class Post_Content {
 			$this->echo_block( $video );
 		} elseif ( count( $images ) === 4 ) {
 			$this->echo_blocks( $text_blocks, 'col-12' );
-			$this->echo_blocks( $images, 'col-6 my-1' );
+			$this->echo_blocks( $images, 'col-12 col-md-6 my-1' );
 			$this->echo_block( $video );
 		} else {
 			$this->echo_blocks( $text_blocks, 'col-12' );
-			$this->echo_blocks( $images, 'col-6 col-md-4 my-1' );
+			$this->echo_blocks( $images, 'col-12 col-sm-6 col-lg-4 my-1' );
 			$this->echo_block( $video );
 		}
 		echo '</div>'; // close row.
