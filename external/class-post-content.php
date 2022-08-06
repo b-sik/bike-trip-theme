@@ -175,12 +175,10 @@ class Post_Content {
 	 * @return string Updated wrapper classes.
 	 */
 	public function apply_block_specific_styles( $block_name, $wrapper_class ) {
-		$wrapper_class .= ' ';
-
 		if ( 'core/quote' === $block_name ) {
-			$wrapper_class .= 'my-auto';
-		} elseif ( 'core/quote' === $block_name ) {
-			$wrapper_class .= 'col-10 offset-1 mt-5';
+			$wrapper_class .= ' my-auto';
+		} elseif ( 'core/video' === $block_name ) {
+			$wrapper_class .= ' col-10 offset-1 mt-5';
 		}
 
 		return $wrapper_class;

@@ -141,3 +141,8 @@ a:active {
   height: 100% !important;
   object-fit: cover;
 }
+
+video,
+img {
+  max-height: 100vh;
+}
