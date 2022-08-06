@@ -95,12 +95,17 @@ a:active {
   transition: all 0.2s ease-in-out;
 }
 
+.card:hover .card-img-overlay {
+  transition: all 0.2s ease-in-out;
+  background-color: #584b53;
+}
+
 .card-text {
   line-height: 1.1;
 }
 
 .card-img-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 #read-more {
