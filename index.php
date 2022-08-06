@@ -52,9 +52,18 @@ $post_excerpt_length = $fields['post_excerpt_length']
 				the_post();
 				$post_fields   = get_fields();
 				$day_number    = $post_fields['day_number'];
+				$multiple_days = $post_fields['multiple_days'];
 				$start_loc     = $post_fields['locations']['start'];
-				$is_single_loc = $post_fields['locations']['single'];
+				$single_loc    = $post_fields['locations']['single'];
 				$end_loc       = $post_fields['locations']['end'];
+
+				if ( ! $single_loc ) {
+					$end_loc = $post_fields['locations']['end'];
+				}
+
+				if ( $multiple_days ) {
+					$end_day_number = $post_fields['end_day_number'];
+				}
 				?>
 				<div class="col-12 col-md-6 col-lg-5">
 					<div class="card bg-dark text-white text-decoration-none" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
@@ -63,9 +72,13 @@ $post_excerpt_length = $fields['post_excerpt_length']
 							<?php endif; ?>
 							<div class="card-img-overlay d-flex flex-column justify-content-start">
 								<h4 class="card-title">
-									<span class="d-block">DAY <?php echo esc_html( $day_number ); ?>:</span>
+									<?php if ( $multiple_days ) { ?>
+										<span class="d-block">DAYS <?php echo esc_html( $day_number . ' - ' . $end_day_number ); ?> </span>
+									<?php } else { ?>
+										<span class="d-block">DAY <?php echo esc_html( $day_number ); ?> </span>
+									<?php } ?>
 
-									<?php if ( $is_single_loc ) { ?>
+									<?php if ( $single_loc ) { ?>
 									<span>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></span>
 									<?php } else { ?>
 										<span>

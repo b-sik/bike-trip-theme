@@ -27,13 +27,21 @@ $bs_wp->get_template_parts(
 		the_post();
 		$fields        = get_fields();
 		$day_number    = $fields['day_number'];
+		$multiple_days = $fields['multiple_days'];
 		$date          = $fields['date'];
 		$weather       = $fields['weather'];
 		$start_loc     = $fields['locations']['start'];
-		$is_single_loc = $fields['locations']['single'];
-		$end_loc       = $fields['locations']['end'];
+		$single_loc    = $fields['locations']['single'];
 		$rest_day      = $fields['miles_and_elevation']['rest_day'];
 		$stats         = $fields['miles_and_elevation'];
+
+		if ( ! $single_loc ) {
+			$end_loc = $fields['locations']['end'];
+		}
+
+		if ( $multiple_days ) {
+			$end_day_number = $fields['end_day_number'];
+		}
 
 		if ( ! empty( $day_number ) && ! $rest_day && $osm->gpx_file_exists( $day_number ) ) {
 			?>
@@ -69,9 +77,13 @@ $bs_wp->get_template_parts(
 		<div class="container">
 			<div class="row">
 				<div class="col-12 col-lg-10 offset-lg-1">
-					<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
+					<?php if ( $multiple_days ) { ?>
+						<h1 class="mb-1">DAYS <?php echo esc_html( $day_number . ' - ' . $end_day_number ); ?> </h1>
+					<?php } else { ?>
+						<h1 class="mb-1">DAY <?php echo esc_html( $day_number ); ?> </h1>
+					<?php } ?>
 
-					<?php if ( $is_single_loc ) { ?>
+					<?php if ( $single_loc ) { ?>
 						<h3>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
 					<?php } else { ?>
 						<h3>
@@ -83,7 +95,6 @@ $bs_wp->get_template_parts(
 
 					<div id="post-content-wrapper" class="mt-5">
 						<?php
-						// the_content();
 						$post_content->single_post_content();
 						?>
 					</div>
