@@ -123,12 +123,16 @@ a:active {
   font-size: .8rem;
 }
 
-figure {
+#single-post figure {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-img {
+#single-post img {
   height: 100% !important;
   object-fit: cover;
 }
