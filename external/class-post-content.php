@@ -31,15 +31,24 @@ class Post_Content {
 		$blocks      = $this->parse_blocks_ignore_empty_blocks( $post->post_content );
 		$block_queue = array();
 
+		$total_blocks = count( $blocks );
+		$count        = 1;
+
 		foreach ( $blocks as $block ) {
 			$blocks_in_queue = array_column( $block_queue, 'blockName' );
 
-			if ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
+			// make sure to echo last block.
+			if ( $total_blocks === $count ) {
+				array_push( $block_queue, $block );
+				$this->output_blocks_with_layouts( $block_queue );
+			} elseif ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
 				$this->output_blocks_with_layouts( $block_queue );
 				$block_queue = array( $block );
 			} else {
 				array_push( $block_queue, $block );
 			}
+
+			$count++;
 		}
 	}
 
