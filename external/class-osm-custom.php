@@ -1,4 +1,18 @@
 <?php
+
+
+// @TODO interactive map
+// use PHP to extract the name/description that would be displayed in the OSM hover popup
+// from the .gpx file. That way the popup can be linked to a blog post
+// -> php get gpx description 
+// -> use filename to retrieve post info
+// -> create associative array with gpx desc., filename/day number, and post info
+// -> make array available to JS
+// -> when popup is opened, match description with possible choices and replace with post info/link
+
+// seems far from ideal, but the first solution I've come up with that doesn't edit the plugin itself.
+// I have yet to find a way to attach info like this serverside, if possible.
+
 /**
  * Custom methods for Open Street Maps plugin
  *
@@ -136,6 +150,6 @@ class OSM_Custom {
 	public function shortcode_all( $height ) {
 		$all_gpx = $this->all_gpx();
 
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '"]';
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '" control="fullscreen,scaleline,mouseposition,overview"]';
 	}
 }
