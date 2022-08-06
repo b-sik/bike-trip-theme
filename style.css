@@ -84,28 +84,6 @@ a:active {
   letter-spacing: -1px;
 }
 
-.wp-block-gallery {
-  margin: 0 auto !important;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.wp-block-gallery::after {
-  content: '';
-  flex: auto;
-}
-
-.wp-block-image {
-  max-width: 25% !important;
-  max-height: auto !important;
-}
-
-.wp-block-video {
-  margin: 0 auto;
-  max-height: 100%;
-  max-width: 30rem;
-} */
-
 .card {
   height: 15rem;
   max-height: 15rem;
