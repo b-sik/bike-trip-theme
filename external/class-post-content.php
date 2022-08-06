@@ -7,17 +7,24 @@
  * @author   Brian Siklinski
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  */
+
+/**
+ * Process and output block-based post content with custom classes, styles, and layouts.
+ */
 class Post_Content {
 	/**
 	 * Construct.
 	 */
 	public function __construct() {
+
 	}
 
 	/**
-	 * Display content with layout.
+	 * Display content with layouts.
+	 *
+	 * @return void
 	 */
-	public function echo_content() {
+	public function single_post_content() {
 
 		global $post;
 
@@ -28,7 +35,7 @@ class Post_Content {
 			$blocks_in_queue = array_column( $block_queue, 'blockName' );
 
 			if ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
-				$this->echo_blocks( $block_queue );
+				$this->output_blocks_with_layouts( $block_queue );
 				$block_queue = array( $block );
 			} else {
 				array_push( $block_queue, $block );
@@ -37,14 +44,15 @@ class Post_Content {
 	}
 
 	/**
-	 * Echo blocks.
+	 * Arrange blocks for output.
+	 *
+	 * @param array $blocks Collection of blocks.
+	 * @return array
 	 */
-	public function echo_blocks( $blocks ) {
-		// var_dump( $blocks );
+	public function process_block_queue( $blocks ) {
 		$text_blocks = array();
 		$images      = array();
 		$video       = array();
-		$quote       = array();
 
 		foreach ( $blocks as $block ) {
 			switch ( $block['blockName'] ) {
@@ -69,99 +77,136 @@ class Post_Content {
 			}
 		}
 
+		return array(
+			'text-blocks' => $text_blocks,
+			'images'      => $images,
+			'video'       => $video,
+		);
+	}
+
+	/**
+	 * Arrange blocks in different layouts and echo output.
+	 *
+	 * @param array $blocks Queue of blocks.
+	 * @return void
+	 */
+	public function output_blocks_with_layouts( $blocks ) {
+		$blocks = $this->process_block_queue( $blocks );
+
+		$text_blocks = $blocks['text-blocks'];
+		$images      = $blocks['images'];
+		$video       = $blocks['video'];
+
+		ob_start();
+
+		echo '<div class="row my-4">';
 		if ( count( $images ) === 1 ) {
 			switch ( $this->get_image_orientation( $images[0] ) ) {
 				case 'landscape':
-					echo '<div class="row my-4">';
-					$this->echo_block( $quote, 'col-12' );
-					$this->echo_block_array( $text_blocks, 'col-12' );
+					$this->echo_blocks( $text_blocks, 'col-12' );
 					$this->echo_block( $images[0], 'col-12' );
-					$this->echo_video( $video );
-					echo '</div>';
+					$this->echo_block( $video );
 					break;
 				case 'portrait':
-					echo '<div class="row my-4">';
-					$this->echo_block( $quote, 'col-12' );
-					$this->echo_block_array( $text_blocks, 'col-12 col-md-6' );
+					$this->echo_blocks( $text_blocks, 'col-12 col-md-6' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
-					$this->echo_video( $video );
-					echo '</div>';
+					$this->echo_block( $video );
 					break;
 			}
 		} elseif ( count( $images ) === 2 ) {
 			if ( $this->all_images_same_orientation( $images ) ) {
-				echo '<div class="row my-4">';
-				$this->echo_block( $quote, 'col-12' );
-				$this->echo_block_array( $text_blocks, 'col-12' );
+				$this->echo_blocks( $text_blocks, 'col-12' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 col-md-6 my-1' );
-				$this->echo_video( $video );
-				echo '</div>';
+				$this->echo_block( $video );
+
 			} else {
 				$images = $this->order_landscape_last( $images );
-				echo '<div class="row my-4">';
-				$this->echo_block( $quote, 'col-12' );
-				$this->echo_block_array( $text_blocks, 'col-12 col-md-6 my-1' );
+				$this->echo_blocks( $text_blocks, 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 my-1 mt-md-5' );
-				$this->echo_video( $video );
-				echo '</div>';
+				$this->echo_block( $video );
 			}
 		} elseif ( count( $images ) === 3 ) {
-			echo '<div class="row my-4">';
-			$this->echo_block( $quote, 'col-12' );
-			$this->echo_block_array( $text_blocks, 'col-12' );
-			$this->echo_block_array( $images, 'col-12 col-md-4 my-1' );
-			$this->echo_video( $video );
-			echo '</div>';
+			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $images, 'col-12 col-md-4 my-1' );
+			$this->echo_block( $video );
 		} elseif ( count( $images ) === 4 ) {
-			echo '<div class="row my-4">';
-			$this->echo_block( $quote, 'col-12' );
-			$this->echo_block_array( $text_blocks, 'col-12' );
-			$this->echo_block_array( $images, 'col-6 my-1' );
-			$this->echo_video( $video );
-			echo '</div>';
+			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $images, 'col-6 my-1' );
+			$this->echo_block( $video );
 		} else {
-			echo '<div class="row my-4">';
-			$this->echo_block( $quote, 'col-12' );
-			$this->echo_block_array( $text_blocks, 'col-12' );
-			$this->echo_block_array( $images, 'col-6 col-md-4 my-1' );
-			$this->echo_video( $video );
-			echo '</div>';
+			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $images, 'col-6 col-md-4 my-1' );
+			$this->echo_block( $video );
 		}
+		echo '</div>'; // close row.
+
+		echo ob_get_clean(); // phpcs:ignore
 	}
 
-
 	/**
-	 * Echo block.
+	 * Output single block.
+	 *
+	 * @param object $block Block.
+	 * @param string $wrapper_class (optional) Wrapper classes.
+	 * @param string $wrapper_style (optional) Wrapper styles.
+	 *
+	 * @return void
 	 */
 	public function echo_block( $block, $wrapper_class = '', $wrapper_style = '' ) {
 		if ( empty( $block ) ) {
 			return;
 		}
 
-		if ( 'core/quote' === $block['blockName'] ) {
-			$wrapper_class .= ' my-auto';
-		}
+		$wrapper_class = $this->apply_block_specific_styles( $block['blockName'], $wrapper_class );
 
 		echo '<div style="' . esc_attr( $wrapper_style ) . '" class="' . esc_attr( $wrapper_class ) . '">';
 		echo wp_kses_post( apply_filters( 'the_content', render_block( $block ) ) );
 		echo '</div>';
 	}
 
-	public function echo_block_array( $blocks, $wrapper_class = '', $wrapper_style = '' ) {
+	/**
+	 * Universal styles for a block.
+	 *
+	 * @param string $block_name Block name.
+	 * @param string $wrapper_class Classes already passed into `echo_block`.
+	 *
+	 * @return string Updated wrapper classes.
+	 */
+	public function apply_block_specific_styles( $block_name, $wrapper_class ) {
+		$wrapper_class .= ' ';
+
+		if ( 'core/quote' === $block_name ) {
+			$wrapper_class .= 'my-auto';
+		} elseif ( 'core/quote' === $block_name ) {
+			$wrapper_class .= 'col-10 offset-1 mt-5';
+		}
+
+		return $wrapper_class;
+	}
+
+	/**
+	 * Output multiple blocks.
+	 *
+	 * @param array  $blocks Blocks.
+	 * @param string $wrapper_class (optional) Wrapper classes.
+	 * @param string $wrapper_style (optional) Wrapper styles.
+	 *
+	 * @return void
+	 */
+	public function echo_blocks( $blocks, $wrapper_class = '', $wrapper_style = '' ) {
 		foreach ( $blocks as $block ) {
 			$this->echo_block( $block, $wrapper_class, $wrapper_style );
 		}
 	}
 
-	public function echo_video( $video ) {
-		if ( ! empty( $video ) ) {
-			$this->echo_block( $video, 'col-10 offset-1 mt-5' );
-		}
-
-	}
-
+	/**
+	 * Takes an array of image blocks and puts landscape photos at end.
+	 *
+	 * @param array $images Image blocks.
+	 * @return array
+	 */
 	public function order_landscape_last( $images ) {
 		$non_landscapes = array();
 		$landscapes     = array();
@@ -177,6 +222,12 @@ class Post_Content {
 		return array_merge( $non_landscapes, $landscapes );
 	}
 
+	/**
+	 * Checks if an array of image blocks contains any landscape images.
+	 *
+	 * @param array $images Image blocks.
+	 * @return bool
+	 */
 	public function has_landscape_image( $images ) {
 		foreach ( $images as $image ) {
 			if ( 'landscape' === $this->get_image_orientation( $image ) ) {
@@ -186,6 +237,12 @@ class Post_Content {
 		}
 	}
 
+	/**
+	 * Returns an array of strings of image orientations.
+	 *
+	 * @param array $images Image blocks.
+	 * @return array
+	 */
 	public function get_image_orientations( $images ) {
 		$image_orientations = array();
 		foreach ( $images as $image ) {
@@ -194,6 +251,13 @@ class Post_Content {
 		return $image_orientations;
 	}
 
+	/**
+	 * Checks if all images are different orientations.
+	 * Mostly used to check if three different images are landscape, portrait, and square.
+	 *
+	 * @param array $images Image blocks.
+	 * @return bool
+	 */
 	public function no_images_same_orientation( $images ) {
 		$image_orientations = $this->get_image_orientations( $images );
 		if ( count( $images ) === count( array_unique( $image_orientations ) ) ) {
@@ -202,13 +266,25 @@ class Post_Content {
 		return false;
 	}
 
+	/**
+	 * Checks if all images are the same orientation.
+	 *
+	 * @param array $images Image blocks.
+	 * @return bool
+	 */
 	public function all_images_same_orientation( $images ) {
 		$image_orientations = $this->get_image_orientations( $images );
 		return count( array_unique( $image_orientations ) ) === 1;
 	}
 
-	public function get_image_orientation( $image_block ) {
-		$dimensions = $this->get_image_dimensions( $image_block );
+	/**
+	 * Checks orientation of single image block.
+	 *
+	 * @param object $image Image block.
+	 * @return string
+	 */
+	public function get_image_orientation( $image ) {
+		$dimensions = $this->get_image_dimensions( $image );
 
 		if ( $dimensions['w'] > $dimensions['h'] ) {
 			return 'landscape';
@@ -219,8 +295,14 @@ class Post_Content {
 		}
 	}
 
-	public function get_image_dimensions( $image_block ) {
-		$str = $this->get_string_between( $image_block['innerHTML'], '<img src="', '.jpeg' );
+	/**
+	 * Get dimensions of single image block.
+	 *
+	 * @param object $image Image block.
+	 * @return array
+	 */
+	public function get_image_dimensions( $image ) {
+		$str = $this->get_string_between( $image['innerHTML'], '<img src="', '.jpeg' );
 
 		$explode_x = explode( 'x', $str );
 
@@ -234,7 +316,14 @@ class Post_Content {
 	}
 
 	/**
+	 * Get portion of string between a start and end.
 	 * https://stackoverflow.com/a/21804537/17378938
+	 *
+	 * @param string $string Full string.
+	 * @param string $start Beginning string match.
+	 * @param string $end Ending string match.
+	 *
+	 * @return string
 	 */
 	public function get_string_between( $string, $start, $end ) {
 		$string = ' ' . $string;
@@ -251,18 +340,18 @@ class Post_Content {
 	 * Check if null block.
 	 * https://github.com/WordPress/gutenberg/issues/15040#issuecomment-484627498
 	 *
-	 * @param object $block
-	 * @return boolean
+	 * @param object $block Block.
+	 * @return bool
 	 */
 	public function is_non_empty_block( $block ) {
-		return ! ( $block['blockName'] === null && empty( trim( $block['innerHTML'] ) ) );
+		return ! ( null === $block['blockName'] && empty( trim( $block['innerHTML'] ) ) );
 	}
 
 	/**
 	 * Remove null blocks.
 	 * https://github.com/WordPress/gutenberg/issues/15040#issuecomment-484627498
 	 *
-	 * @param string $content
+	 * @param string $content Post content.
 	 * @return array Parsed blocks
 	 */
 	public function parse_blocks_ignore_empty_blocks( $content ) {

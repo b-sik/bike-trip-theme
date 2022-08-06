@@ -84,7 +84,7 @@ $bs_wp->get_template_parts(
 					<div id="post-content-wrapper" class="mt-5">
 						<?php
 						// the_content();
-						$post_content->echo_content();
+						$post_content->single_post_content();
 						?>
 					</div>
 				</div>
@@ -92,6 +92,7 @@ $bs_wp->get_template_parts(
 		</div>
 </div>
 <?php endif;
+	wp_reset_postdata();
 
 	$bs_wp->get_template_parts(
 		array(

@@ -92,6 +92,8 @@ $post_excerpt_length = $fields['post_excerpt_length']
 </section>
 
 <?php
+wp_reset_postdata();
+
 $bs_wp->get_template_parts(
 	array(
 		'parts/shared/footer',

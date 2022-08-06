@@ -45,7 +45,7 @@ class OSM_Custom {
 	 * @return bool
 	 */
 	public function file_url_exists( $filename ) {
-		$file = @fopen( $filename, 'r' );
+		$file = @fopen( $filename, 'r' ); // phpcs:ignore
 		return $file ? true : false;
 	}
 
@@ -100,6 +100,8 @@ class OSM_Custom {
 				}
 			endwhile;
 		endif;
+
+		wp_reset_postdata();
 
 		$filenames  = rtrim( $filenames, ',' );
 		$color_list = rtrim( $color_list, ',' );
