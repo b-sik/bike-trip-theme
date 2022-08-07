@@ -138,8 +138,7 @@ a:active {
 }
 
 #single-post img {
-  height: 100% !important;
-  object-fit: cover;
+  max-height: 100% !important;
 }
 
 video,
