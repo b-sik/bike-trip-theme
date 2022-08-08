@@ -4,7 +4,7 @@
 // @TODO interactive map
 // use PHP to extract the name/description that would be displayed in the OSM hover popup
 // from the .gpx file. That way the popup can be linked to a blog post
-// -> php get gpx description 
+// -> php get gpx description
 // -> use filename to retrieve post info
 // -> create associative array with gpx desc., filename/day number, and post info
 // -> make array available to JS
@@ -85,6 +85,7 @@ class OSM_Custom {
 
 	/**
 	 * All GPX filenames and associated color list.
+	 * Also localizes data for JS-related popup manipulation.
 	 *
 	 * @return array
 	 */
@@ -92,6 +93,8 @@ class OSM_Custom {
 		$filenames  = '';
 		$color_list = '';
 		$count      = 0;
+
+		$js_data = array();
 
 		if ( have_posts() ) :
 			while ( have_posts() ) :
@@ -102,6 +105,8 @@ class OSM_Custom {
 					$filename = $this->make_gpx_filename( $fields['day_number'] );
 
 					if ( $this->file_url_exists( $filename ) ) {
+						array_push( $js_data, $this->localize_gpx_data( $filename, $fields ) );
+
 						$filenames = $filenames . $filename . ',';
 
 						$color_list = $color_list . $this->colors[ $count ] . ',';
@@ -112,10 +117,12 @@ class OSM_Custom {
 						}
 					}
 				}
-			endwhile;
-		endif;
+				endwhile;
+			endif;
 
 		wp_reset_postdata();
+
+		wp_localize_script( 'site', 'gpxData', $js_data );
 
 		$filenames  = rtrim( $filenames, ',' );
 		$color_list = rtrim( $color_list, ',' );
@@ -139,7 +146,6 @@ class OSM_Custom {
 		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $filename . '" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
 	}
 
-
 	/**
 	 * Generate OSM plugin shortcode with all gpx files.
 	 *
@@ -150,6 +156,23 @@ class OSM_Custom {
 	public function shortcode_all( $height ) {
 		$all_gpx = $this->all_gpx();
 
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '" control="fullscreen,scaleline,mouseposition,overview"]';
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '" control="fullscreen,scaleline,mouseposition"]';
+	}
+
+	public function localize_gpx_data( $filename, $fields ) {
+		$gpx = simplexml_load_file( $filename );
+
+		$data = (object) array(
+			'post_id'   => get_the_ID(),
+			'permalink' => get_the_permalink(),
+			'fields'    => $fields,
+			'names'     => array(),
+		);
+
+		foreach ( $gpx->wpt as $wpt ) {
+			$data->names[] = (string) $wpt->name;
+		}
+
+		return $data;
 	}
 }
