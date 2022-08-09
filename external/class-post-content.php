@@ -79,7 +79,9 @@ class Post_Content {
 					$text_blocks[] = $block;
 					break;
 				case 'core/gallery':
-					$images = $block['innerBlocks'];
+					foreach ( $block['innerBlocks'] as $inner_block ) {
+						$images[] = $inner_block;
+					}
 					break;
 				case 'core/video':
 					$video = $block;
@@ -147,7 +149,7 @@ class Post_Content {
 			$this->echo_block( $video );
 		} else {
 			$this->echo_blocks( $text_blocks, 'col-12' );
-			$this->echo_blocks( $images, 'col-12 col-sm-6 col-lg-4 my-1' );
+			$this->echo_blocks( $images, 'col-12 col-md-6 col-lg-4 my-1' );
 			$this->echo_block( $video );
 		}
 		echo '</div>'; // close row.
