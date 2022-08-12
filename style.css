@@ -12,16 +12,6 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
-a:link,
-a:visited {
-  color: #7BF8F8;
-}
-
-a:hover,
-a:active {
-  color: #FF8BFA;
-}
-
 .navbar-brand {
     padding: 0 !important;
 }
@@ -82,6 +72,26 @@ a:active {
 
 .venmo-text {
   letter-spacing: -1px;
+}
+
+.venmo-text a:link,
+.venmo-text a:visited {
+  color: #7BF8F8;
+}
+
+.venmo-text a:hover,
+.venmo-text a:active {
+  color: #FF8BFA;
+}
+
+#bsik-link:link,
+#bsik-link:visited {
+  color: #7BF8F8;
+}
+
+#bsik-link:hover,
+#bsik-link:active {
+  color: #FF8BFA;
 }
 
 .card {
@@ -145,4 +155,12 @@ a:active {
 video,
 img {
   max-height: 90vh;
+}
+
+#map_ol3js_1_popup {
+  position: absolute;
+  bottom: 0px;
+  left: -50px;
+  min-width: 15rem;
+  height: 8rem !important;
 }

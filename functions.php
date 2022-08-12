@@ -300,6 +300,21 @@ function allowed_block_types( $block_editor_context, $editor_context ) {
 
 add_filter( 'allowed_block_types_all', 'allowed_block_types', 10, 2 );
 
+/**
+ * https://stackoverflow.com/questions/58931144/enqueue-javascript-with-type-module
+ */
+function add_type_attribute( $tag, $handle, $src ) {
+	// if not your script, do nothing and return original $tag
+	if ( 'site' !== $handle ) {
+		return $tag;
+	}
+	// change the script tag by adding type="module" and return it.
+	$tag = '<script type="module" src="' . esc_url( $src ) . '"></script>'; // phpcs:ignore
+	return $tag;
+}
+
+add_filter( 'script_loader_tag', 'add_type_attribute', 10, 3 );
+
 $front_page_id = strval( get_page_by_title( 'Front Page' )->ID );
 if ( function_exists( 'acf_add_local_field_group' ) ) :
 
