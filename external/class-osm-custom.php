@@ -24,6 +24,13 @@ class OSM_Custom {
 	public $colors = array( 'blue', 'green', 'red', 'grey', 'black', 'purple', 'yellow', 'orange' );
 
 	/**
+	 * Post meta key - gpx names.
+	 *
+	 * @var string GPX names post meta key.
+	 */
+	public $gpx_names_meta_key = '__gpx_meta_names';
+
+	/**
 	 * Construct.
 	 */
 	public function __construct() {
@@ -88,6 +95,13 @@ class OSM_Custom {
 				the_post();
 				$fields = get_fields();
 
+				// where can I lower the processing stress?
+				// First - remove the need to process the gpx files on server load for 'names' data
+				// do this by putting in a check to the posts metadata for something like '_gpx_meta_names'
+				// if that doesn't exist, then process the gpx and add to that posts meta
+				// therefore, it will only have to process on first load for new gpx
+				// to start - create a localized var using post meta data and see if everything works, go from there
+
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
 					$filename = $this->make_gpx_filename( $fields['day_number'] );
 
@@ -146,19 +160,49 @@ class OSM_Custom {
 		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '" control="fullscreen,scaleline,mouseposition"]';
 	}
 
-	public function localize_gpx_data( $filename, $fields ) {
+	/**
+	 * Get array of gpx waypoint names.
+	 *
+	 * @param string $filename Complete filename and path of gpx file.
+	 * @return array
+	 */
+	public function get_gpx_waypoint_names( $filename ) {
+		$names = array();
+
 		$gpx = simplexml_load_file( $filename );
+
+		foreach ( $gpx->wpt as $wpt ) {
+			$names[] = (string) $wpt->name;
+		}
+
+		return $names;
+	}
+
+	public function localize_gpx_data( $filename, $fields ) {
+		$names = array();
+
+		// 1. check if post meta already exists
+		// 2. if it exists, add array to localize object
+		// 3. if it doesn't exist, process the gpx file and get the data
+		// 4. add to post meta and localize object
+
+		// what if a replacement gpx gets uploaded?
+		// for now - manually delete the post meta key.
+
+		$names = array();
+		if ( ! metadata_exists( 'post', get_the_ID(), $this->gpx_names_meta_key ) ) {
+			$names = $this->get_gpx_waypoint_names( $filename );
+			update_post_meta( get_the_ID(), $this->gpx_names_meta_key, $names );
+		} else {
+			$names = get_post_meta( get_the_ID(), $this->gpx_names_meta_key, true );
+		}
 
 		$data = (object) array(
 			'post_id'   => get_the_ID(),
 			'permalink' => get_the_permalink(),
 			'fields'    => $fields,
-			'names'     => array(),
+			'names'     => $names,
 		);
-
-		foreach ( $gpx->wpt as $wpt ) {
-			$data->names[] = (string) $wpt->name;
-		}
 
 		return $data;
 	}
