@@ -84,7 +84,7 @@ class Post_Content {
 					}
 					break;
 				case 'core/video':
-					$video = $block;
+					$video[] = $block;
 					break;
 			}
 		}
@@ -122,7 +122,7 @@ class Post_Content {
 				case 'portrait':
 					$this->echo_blocks( $text_blocks, 'col-12 col-md-6' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
-					$this->echo_block( $video );
+					$this->echo_blocks( $video );
 					break;
 			}
 		} elseif ( count( $images ) === 2 ) {
@@ -130,27 +130,27 @@ class Post_Content {
 				$this->echo_blocks( $text_blocks, 'col-12' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 col-md-6 my-1' );
-				$this->echo_block( $video );
+				$this->echo_blocks( $video );
 
 			} else {
 				$images = $this->order_landscape_last( $images );
 				$this->echo_blocks( $text_blocks, 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 my-1 mt-md-5' );
-				$this->echo_block( $video );
+				$this->echo_blocks( $video );
 			}
 		} elseif ( count( $images ) === 3 ) {
 			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-4 my-1' );
-			$this->echo_block( $video );
+			$this->echo_blocks( $video );
 		} elseif ( count( $images ) === 4 ) {
 			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-6 my-1' );
-			$this->echo_block( $video );
+			$this->echo_blocks( $video );
 		} else {
 			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-6 col-lg-4 my-1' );
-			$this->echo_block( $video );
+			$this->echo_blocks( $video );
 		}
 		echo '</div>'; // close row.
 
