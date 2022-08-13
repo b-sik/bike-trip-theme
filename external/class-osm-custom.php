@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Custom methods for Open Street Maps plugin
  *
@@ -21,6 +22,13 @@ class OSM_Custom {
 	 * @var array Possible track colors.
 	 */
 	public $colors = array( 'blue', 'green', 'red', 'grey', 'black', 'purple', 'yellow', 'orange' );
+
+	/**
+	 * Post meta key - gpx names.
+	 *
+	 * @var string GPX names post meta key.
+	 */
+	public $gpx_names_meta_key = '__gpx_meta_names';
 
 	/**
 	 * Construct.
@@ -71,6 +79,7 @@ class OSM_Custom {
 
 	/**
 	 * All GPX filenames and associated color list.
+	 * Also localizes data for JS-related popup manipulation.
 	 *
 	 * @return array
 	 */
@@ -79,15 +88,26 @@ class OSM_Custom {
 		$color_list = '';
 		$count      = 0;
 
+		$js_data = array();
+
 		if ( have_posts() ) :
 			while ( have_posts() ) :
 				the_post();
 				$fields = get_fields();
 
+				// where can I lower the processing stress?
+				// First - remove the need to process the gpx files on server load for 'names' data
+				// do this by putting in a check to the posts metadata for something like '_gpx_meta_names'
+				// if that doesn't exist, then process the gpx and add to that posts meta
+				// therefore, it will only have to process on first load for new gpx
+				// to start - create a localized var using post meta data and see if everything works, go from there
+
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
 					$filename = $this->make_gpx_filename( $fields['day_number'] );
 
 					if ( $this->file_url_exists( $filename ) ) {
+						array_push( $js_data, $this->localize_gpx_data( $filename, $fields ) );
+
 						$filenames = $filenames . $filename . ',';
 
 						$color_list = $color_list . $this->colors[ $count ] . ',';
@@ -98,10 +118,12 @@ class OSM_Custom {
 						}
 					}
 				}
-			endwhile;
-		endif;
+				endwhile;
+			endif;
 
 		wp_reset_postdata();
+
+		wp_localize_script( 'site', 'gpxData', $js_data );
 
 		$filenames  = rtrim( $filenames, ',' );
 		$color_list = rtrim( $color_list, ',' );
@@ -125,7 +147,6 @@ class OSM_Custom {
 		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $filename . '" file_color_list="' . $file_color_list . '" file_title="' . $filename . '"]';
 	}
 
-
 	/**
 	 * Generate OSM plugin shortcode with all gpx files.
 	 *
@@ -136,6 +157,53 @@ class OSM_Custom {
 	public function shortcode_all( $height ) {
 		$all_gpx = $this->all_gpx();
 
-		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '"]';
+		return '[osm_map_v3 map_center="autolat,autolon" zoom="autozoom" width="100%" height="' . $height . '" file_list="' . $all_gpx['filenames'] . '" file_color_list="' . $all_gpx['color_list'] . '" file_title="' . $all_gpx['filenames'] . '" control="fullscreen,scaleline,mouseposition"]';
+	}
+
+	/**
+	 * Get array of gpx waypoint names.
+	 *
+	 * @param string $filename Complete filename and path of gpx file.
+	 * @return array
+	 */
+	public function get_gpx_waypoint_names( $filename ) {
+		$names = array();
+
+		$gpx = simplexml_load_file( $filename );
+
+		foreach ( $gpx->wpt as $wpt ) {
+			$names[] = (string) $wpt->name;
+		}
+
+		return $names;
+	}
+
+	public function localize_gpx_data( $filename, $fields ) {
+		$names = array();
+
+		// 1. check if post meta already exists
+		// 2. if it exists, add array to localize object
+		// 3. if it doesn't exist, process the gpx file and get the data
+		// 4. add to post meta and localize object
+
+		// what if a replacement gpx gets uploaded?
+		// for now - manually delete the post meta key.
+
+		$names = array();
+		if ( ! metadata_exists( 'post', get_the_ID(), $this->gpx_names_meta_key ) ) {
+			$names = $this->get_gpx_waypoint_names( $filename );
+			update_post_meta( get_the_ID(), $this->gpx_names_meta_key, $names );
+		} else {
+			$names = get_post_meta( get_the_ID(), $this->gpx_names_meta_key, true );
+		}
+
+		$data = (object) array(
+			'post_id'   => get_the_ID(),
+			'permalink' => get_the_permalink(),
+			'fields'    => $fields,
+			'names'     => $names,
+		);
+
+		return $data;
 	}
 }
