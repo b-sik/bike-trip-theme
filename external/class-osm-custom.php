@@ -38,15 +38,6 @@ class OSM_Custom {
 	}
 
 	/**
-	 * Location of GPX directory with uploads dir.
-	 *
-	 * @return string Directory url.
-	 */
-	public function gpx_uploads_dir_url() {
-		return wp_upload_dir()['baseurl'] . $this->gpx_dir_url;
-	}
-
-	/**
 	 * Check if file exists on server.
 	 *
 	 * @param string $filename Complete URL of file.
@@ -55,16 +46,6 @@ class OSM_Custom {
 	public function file_url_exists( $filename ) {
 		$file = @fopen( $filename, 'r' ); // phpcs:ignore
 		return $file ? true : false;
-	}
-
-	/**
-	 * Create entire filename within directory.
-	 *
-	 * @param string $name File name.
-	 * @return string
-	 */
-	public function make_gpx_filename( $name ) {
-		return $this->gpx_uploads_dir_url() . $name . '.gpx';
 	}
 
 	/**
@@ -78,15 +59,54 @@ class OSM_Custom {
 	}
 
 	/**
+	 * Location of GPX directory with uploads dir.
+	 *
+	 * @param bool $basedir Return base directory or url.
+	 * @return string Directory url.
+	 */
+	public function gpx_uploads_dir_url( $basedir ) {
+		if ( $basedir ) {
+			return wp_upload_dir()['basedir'] . $this->gpx_dir_url;
+		} else {
+			return wp_upload_dir()['baseurl'] . $this->gpx_dir_url;
+		}
+	}
+
+	/**
+	 * Create entire filename within directory.
+	 *
+	 * @param string $name File name.
+	 * @param bool   $basedir Return base directory instead of URL.
+	 *
+	 * @return string
+	 */
+	public function make_gpx_filename( $name, $basedir = false ) {
+		return $this->gpx_uploads_dir_url( $basedir ) . $name . '.gpx';
+	}
+
+	/**
+	 * Create both dir and url filenames.
+	 *
+	 * @param string $name File name.
+	 * @return array
+	 */
+	public function make_gpx_filenames( $name ) {
+		return array(
+			'url' => $this->gpx_uploads_dir_url( false ) . $name . '.gpx',
+			'dir' => $this->gpx_uploads_dir_url( true ) . $name . '.gpx',
+		);
+	}
+
+	/**
 	 * All GPX filenames and associated color list.
 	 * Also localizes data for JS-related popup manipulation.
 	 *
 	 * @return array
 	 */
 	public function all_gpx() {
-		$filenames  = '';
-		$color_list = '';
-		$count      = 0;
+		$filenames_list = '';
+		$color_list     = '';
+		$count          = 0;
 
 		$js_data = array();
 
@@ -95,20 +115,13 @@ class OSM_Custom {
 				the_post();
 				$fields = get_fields();
 
-				// where can I lower the processing stress?
-				// First - remove the need to process the gpx files on server load for 'names' data
-				// do this by putting in a check to the posts metadata for something like '_gpx_meta_names'
-				// if that doesn't exist, then process the gpx and add to that posts meta
-				// therefore, it will only have to process on first load for new gpx
-				// to start - create a localized var using post meta data and see if everything works, go from there
-
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
-					$filename = $this->make_gpx_filename( $fields['day_number'] );
+					$filename = $this->make_gpx_filenames( $fields['day_number'] );
 
-					if ( $this->file_url_exists( $filename ) ) {
-						array_push( $js_data, $this->localize_gpx_data( $filename, $fields ) );
+					if ( $this->file_url_exists( $filename['url'] ) ) {
+						array_push( $js_data, $this->get_gpx_post_data( $filename, $fields ) );
 
-						$filenames = $filenames . $filename . ',';
+						$filenames_list = $filenames_list . $filename['url'] . ',';
 
 						$color_list = $color_list . $this->colors[ $count ] . ',';
 
@@ -125,11 +138,11 @@ class OSM_Custom {
 
 		wp_localize_script( 'site', 'gpxData', $js_data );
 
-		$filenames  = rtrim( $filenames, ',' );
-		$color_list = rtrim( $color_list, ',' );
+		$filenames_list = rtrim( $filenames_list, ',' );
+		$color_list     = rtrim( $color_list, ',' );
 
 		return array(
-			'filenames'  => $filenames,
+			'filenames'  => $filenames_list,
 			'color_list' => $color_list,
 		);
 	}
@@ -162,34 +175,57 @@ class OSM_Custom {
 
 	/**
 	 * Get array of gpx waypoint names.
+	 * Removes all waypoints except for first and last.
 	 *
-	 * @param string $filename Complete filename and path of gpx file.
+	 * @param array $filename Dir and url filenames.
 	 * @return array
 	 */
 	public function get_gpx_waypoint_names( $filename ) {
-		$names = array();
+		$names          = array();
+		$wpts_to_remove = array();
 
-		$gpx = simplexml_load_file( $filename );
+		$gpx = new DOMDocument();
+		$gpx->load( $filename['url'] );
+		$root = $gpx->documentElement; // phpcs:ignore
 
-		foreach ( $gpx->wpt as $wpt ) {
-			$names[] = (string) $wpt->name;
+		$waypoints = $root->getElementsByTagName( 'wpt' );
+
+		foreach ( $waypoints as $i => $wpt ) {
+			// add first and last waypoint names to array.
+			if ( 0 === $i || count( $waypoints ) - 1 === $i ) {
+				foreach ( $wpt->childNodes as $node ) { // phpcs:ignore
+					if ( 'name' === $node->tagName ) { // phpcs:ignore
+						$names[] = $node->nodeValue; // phpcs:ignore
+					}
+				}
+				// remove all other waypoints.
+			} else {
+				$wpts_to_remove[] = $wpt;
+			}
+		}
+
+		if ( ! empty( $wpts_to_remove ) ) {
+			foreach ( $wpts_to_remove as $wpt ) {
+				$wpt->parentNode->removeChild( $wpt ); // phpcs:ignore
+			}
+
+			$gpx->save( $filename['dir'] );
 		}
 
 		return $names;
 	}
 
-	public function localize_gpx_data( $filename, $fields ) {
+	/**
+	 * Process GPX file and return data object to be localized.
+	 *
+	 * @param array $filename Dir and url filenames.
+	 * @param array $fields ACF fields.
+	 *
+	 * @return object
+	 */
+	public function get_gpx_post_data( $filename, $fields ) {
 		$names = array();
 
-		// 1. check if post meta already exists
-		// 2. if it exists, add array to localize object
-		// 3. if it doesn't exist, process the gpx file and get the data
-		// 4. add to post meta and localize object
-
-		// what if a replacement gpx gets uploaded?
-		// for now - manually delete the post meta key.
-
-		$names = array();
 		if ( ! metadata_exists( 'post', get_the_ID(), $this->gpx_names_meta_key ) ) {
 			$names = $this->get_gpx_waypoint_names( $filename );
 			update_post_meta( get_the_ID(), $this->gpx_names_meta_key, $names );
