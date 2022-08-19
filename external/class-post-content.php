@@ -119,7 +119,7 @@ class Post_Content {
 					$this->echo_block( $images[0], 'col-12' );
 					$this->echo_block( $video );
 					break;
-				case 'portrait':
+				default:
 					$this->echo_blocks( $text_blocks, 'col-12 col-md-6' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 					$this->echo_blocks( $video );
