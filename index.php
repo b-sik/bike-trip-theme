@@ -31,14 +31,13 @@ $post_excerpt_length = $fields['post_excerpt_length']
 <section id="osm-overview-map" class="container-fluid min-vh-100 d-flex align-items-center">
 	<div class="row justify-content-center flex-grow-1">
 		<div class="osm-wrapper col-11 col-md-10 text-center">
-			<h3 class="mb-5 pb-3"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
-			<small>
+			<h3 class="pb-2"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
+			<small class="py-3 text-center d-block" style="font-weight:300;">Click on a route segment to see that day's blog post 📍</small>
 			<?php
 			echo do_shortcode( $osm->shortcode_all( 450 ) );
 			?>
 		</div>
-		<small class="pb-4 pt-2 text-center d-block">Click on a route segment to see that day's blog post 📍</small>
-		<p class="venmo-text text-center">Help the Wheelie Babes stay fueled by <a href="https://venmo.com/?txn=pay&audience=friends&recipients=svenericson@gmail.com&amount=5.00&note=Wheelie%20Babes%20Breakfast%20Sandwich" target="_blank" rel="noopener noreferrer">buying them a breakfast sandwich</a>!</p>
+		<p class="venmo-text text-center pt-3">Help the Wheelie Babes stay fueled by <a href="https://venmo.com/?txn=pay&audience=friends&recipients=svenericson@gmail.com&amount=5.00&note=Wheelie%20Babes%20Breakfast%20Sandwich" target="_blank" rel="noopener noreferrer">buying them a breakfast sandwich</a>!</p>
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 mt-2 mb-5">
