@@ -31,6 +31,35 @@ class OSM_Custom {
 	public $gpx_names_meta_key = '__gpx_meta_names';
 
 	/**
+	 * Post meta key - filenames list.
+	 *
+	 * @var string OSM shortcode filenames list post meta key.
+	 */
+	public $osm_filenames_meta_key = '__osm_filenames_list';
+
+	/**
+	 * Post meta key - colors list.
+	 *
+	 * @var string OSM shortcode colors list post meta key.
+	 */
+	public $osm_colors_meta_key = '__osm_colors_list';
+
+	/**
+	 * Post meta key - gpx file count.
+	 * Used to check whether the post loop needs to run to update the filenames/colors list.
+	 *
+	 * @var int Total gpx file count.
+	 */
+	public $gpx_file_count_meta_key = '__gpx_file_count';
+
+	/**
+	 * Post meta key - JS data to localize.
+	 *
+	 * @var array Data to localize for use on frontend.
+	 */
+	public $gpx_js_data_meta_key = '__gpx_js_data';
+
+	/**
 	 * Construct.
 	 */
 	public function __construct() {
@@ -88,7 +117,7 @@ class OSM_Custom {
 	 * Create both dir and url filenames.
 	 *
 	 * @param string $name File name.
-	 * @return array
+	 * @return array|void
 	 */
 	public function make_gpx_filenames( $name ) {
 		return array(
@@ -98,12 +127,70 @@ class OSM_Custom {
 	}
 
 	/**
-	 * All GPX filenames and associated color list.
+	 * Get count of files in GPX directory.
+	 *
+	 * @return int
+	 */
+	public function get_gpx_file_count() {
+		$gpx_iterator = new FilesystemIterator( $this->gpx_uploads_dir_url( true ) );
+		return iterator_count( $gpx_iterator );
+	}
+
+	/**
+	 * Returns all GPX filenames and associated color list for use in OSM shortcode.
 	 * Also localizes data for JS-related popup manipulation.
+	 * Contains series of checks to determine if data can be grabbed from db to avoid post loop.
+	 * Loop should only run when a new GPX file is added to the GPX uploads dir.
 	 *
 	 * @return array
 	 */
 	public function all_gpx() {
+		// This function should only be running on the front page.
+		global $post;
+		$page_id        = $post->ID;
+		$file_gpx_count = $this->get_gpx_file_count();
+
+		// is the gpx file count set in post meta?
+		if ( metadata_exists( 'post', $page_id, $this->gpx_file_count_meta_key ) ) {
+			$meta_gpx_count = (int) get_post_meta( $page_id, $this->gpx_file_count_meta_key, true );
+
+			// does the file count match the post meta count?
+			// if yes, return data from db. if no, run the loop.
+			if ( $meta_gpx_count === $file_gpx_count ) {
+
+				// before we return data from db, we also need to check if the js data to localize is available.
+				// if not, run the loop.
+				if ( metadata_exists( 'post', $page_id, $this->gpx_js_data_meta_key ) ) {
+					$js_data = get_post_meta( $page_id, $this->gpx_js_data_meta_key, true );
+					wp_localize_script( 'site', 'gpxData', $js_data );
+
+					return array(
+						'filenames'  => get_post_meta( $page_id, $this->osm_filenames_meta_key, true ),
+						'color_list' => get_post_meta( $page_id, $this->osm_colors_meta_key, true ),
+					);
+				} else {
+					return $this->all_gpx_do_loop( $page_id, $file_gpx_count );
+				}
+			} else {
+				return $this->all_gpx_do_loop( $page_id, $file_gpx_count );
+			}
+		} else {
+			// set gpx file count in post meta if not set and run function again.
+			update_post_meta( $page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
+			$this->all_gpx();
+		}
+	}
+
+	/**
+	 * Loop through posts to create GPX file data for OSM shortcode.
+	 * Sets relevant post meta and localizes JS data.
+	 *
+	 * @param int $page_id Page ID for post meta.
+	 * @param int $file_gpx_count Result of GPX dir file iterator count.
+	 *
+	 * @return array
+	 */
+	public function all_gpx_do_loop( $page_id, $file_gpx_count ) {
 		$filenames_list = '';
 		$color_list     = '';
 		$count          = 0;
@@ -131,15 +218,20 @@ class OSM_Custom {
 						}
 					}
 				}
-				endwhile;
-			endif;
+			endwhile;
+		endif;
 
 		wp_reset_postdata();
 
-		wp_localize_script( 'site', 'gpxData', $js_data );
-
 		$filenames_list = rtrim( $filenames_list, ',' );
 		$color_list     = rtrim( $color_list, ',' );
+
+		update_post_meta( $page_id, $this->osm_filenames_meta_key, $filenames_list );
+		update_post_meta( $page_id, $this->osm_colors_meta_key, $color_list );
+		update_post_meta( $page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
+		update_post_meta( $page_id, $this->gpx_js_data_meta_key, $js_data );
+
+		wp_localize_script( 'site', 'gpxData', $js_data );
 
 		return array(
 			'filenames'  => $filenames_list,
@@ -164,7 +256,6 @@ class OSM_Custom {
 	 * Generate OSM plugin shortcode with all gpx files.
 	 *
 	 * @param int|string $height Map height.
-	 *
 	 * @return string OSM shortcode.
 	 */
 	public function shortcode_all( $height ) {
