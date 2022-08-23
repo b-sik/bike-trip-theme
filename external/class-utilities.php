@@ -16,6 +16,17 @@ class BTT_Utilities {
 	}
 
 	/**
+	 * Front Page ID.
+	 * This is used as a config post for attaching meta.
+	 *
+	 * @return int
+	 */
+	public static function get_config_post_id() {
+		$page = get_page_by_title( 'Front Page' );
+		return $page->ID;
+	}
+
+	/**
 	 * Content excerpt.
 	 *
 	 * @param int                    $length Number of characters.

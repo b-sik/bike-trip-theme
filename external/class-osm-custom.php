@@ -10,6 +10,13 @@
  */
 class OSM_Custom {
 	/**
+	 * ID of config page, to store meta.
+	 *
+	 * @var int ID of config page.
+	 */
+	public $config_page_id;
+
+	/**
 	 * GPX directory relative to uploads.
 	 *
 	 * @var string Location of directory with gpx files.
@@ -35,14 +42,14 @@ class OSM_Custom {
 	 *
 	 * @var string OSM shortcode filenames list post meta key.
 	 */
-	public $osm_filenames_meta_key = '__osm_filenames_list';
+	public $gpx_filenames_meta_key = '__gpx_filenames_list';
 
 	/**
 	 * Post meta key - colors list.
 	 *
 	 * @var string OSM shortcode colors list post meta key.
 	 */
-	public $osm_colors_meta_key = '__osm_colors_list';
+	public $gpx_colors_meta_key = '__gpx_colors_list';
 
 	/**
 	 * Post meta key - gpx file count.
@@ -63,7 +70,7 @@ class OSM_Custom {
 	 * Construct.
 	 */
 	public function __construct() {
-
+		$this->config_page_id = BTT_Utilities::get_config_post_id();
 	}
 
 	/**
@@ -145,14 +152,11 @@ class OSM_Custom {
 	 * @return array
 	 */
 	public function all_gpx() {
-		// This function should only be running on the front page.
-		global $post;
-		$page_id        = $post->ID;
 		$file_gpx_count = $this->get_gpx_file_count();
 
 		// is the gpx file count set in post meta?
-		if ( metadata_exists( 'post', $page_id, $this->gpx_file_count_meta_key ) ) {
-			$meta_gpx_count = (int) get_post_meta( $page_id, $this->gpx_file_count_meta_key, true );
+		if ( metadata_exists( 'post', $this->config_page_id, $this->gpx_file_count_meta_key ) ) {
+			$meta_gpx_count = (int) get_post_meta( $this->config_page_id, $this->gpx_file_count_meta_key, true );
 
 			// does the file count match the post meta count?
 			// if yes, return data from db. if no, run the loop.
@@ -160,23 +164,23 @@ class OSM_Custom {
 
 				// before we return data from db, we also need to check if the js data to localize is available.
 				// if not, run the loop.
-				if ( metadata_exists( 'post', $page_id, $this->gpx_js_data_meta_key ) ) {
-					$js_data = get_post_meta( $page_id, $this->gpx_js_data_meta_key, true );
+				if ( metadata_exists( 'post', $this->config_page_id, $this->gpx_js_data_meta_key ) ) {
+					$js_data = get_post_meta( $this->config_page_id, $this->gpx_js_data_meta_key, true );
 					wp_localize_script( 'site', 'gpxData', $js_data );
 
 					return array(
-						'filenames'  => get_post_meta( $page_id, $this->osm_filenames_meta_key, true ),
-						'color_list' => get_post_meta( $page_id, $this->osm_colors_meta_key, true ),
+						'filenames'  => get_post_meta( $this->config_page_id, $this->osm_filenames_meta_key, true ),
+						'color_list' => get_post_meta( $this->config_page_id, $this->osm_colors_meta_key, true ),
 					);
 				} else {
-					return $this->all_gpx_do_loop( $page_id, $file_gpx_count );
+					return $this->all_gpx_do_loop( $this->config_page_id, $file_gpx_count );
 				}
 			} else {
-				return $this->all_gpx_do_loop( $page_id, $file_gpx_count );
+				return $this->all_gpx_do_loop( $this->config_page_id, $file_gpx_count );
 			}
 		} else {
 			// set gpx file count in post meta if not set and run function again.
-			update_post_meta( $page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
+			update_post_meta( $this->config_page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
 			$this->all_gpx();
 		}
 	}
@@ -185,12 +189,11 @@ class OSM_Custom {
 	 * Loop through posts to create GPX file data for OSM shortcode.
 	 * Sets relevant post meta and localizes JS data.
 	 *
-	 * @param int $page_id Page ID for post meta.
 	 * @param int $file_gpx_count Result of GPX dir file iterator count.
 	 *
 	 * @return array
 	 */
-	public function all_gpx_do_loop( $page_id, $file_gpx_count ) {
+	public function all_gpx_do_loop( $file_gpx_count ) {
 		$filenames_list = '';
 		$color_list     = '';
 		$count          = 0;
@@ -226,10 +229,10 @@ class OSM_Custom {
 		$filenames_list = rtrim( $filenames_list, ',' );
 		$color_list     = rtrim( $color_list, ',' );
 
-		update_post_meta( $page_id, $this->osm_filenames_meta_key, $filenames_list );
-		update_post_meta( $page_id, $this->osm_colors_meta_key, $color_list );
-		update_post_meta( $page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
-		update_post_meta( $page_id, $this->gpx_js_data_meta_key, $js_data );
+		update_post_meta( $this->config_page_id, $this->osm_filenames_meta_key, $filenames_list );
+		update_post_meta( $this->config_page_id, $this->osm_colors_meta_key, $color_list );
+		update_post_meta( $this->config_page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
+		update_post_meta( $this->config_page_id, $this->gpx_js_data_meta_key, $js_data );
 
 		wp_localize_script( 'site', 'gpxData', $js_data );
 
@@ -308,6 +311,7 @@ class OSM_Custom {
 
 	/**
 	 * Process GPX file and return data object to be localized.
+	 * Runs inside of a posts loop.
 	 *
 	 * @param array $filename Dir and url filenames.
 	 * @param array $fields ACF fields.
