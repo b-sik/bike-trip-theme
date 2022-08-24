@@ -169,8 +169,8 @@ class OSM_Custom {
 					wp_localize_script( 'site', 'gpxData', $js_data );
 
 					return array(
-						'filenames'  => get_post_meta( $this->config_page_id, $this->osm_filenames_meta_key, true ),
-						'color_list' => get_post_meta( $this->config_page_id, $this->osm_colors_meta_key, true ),
+						'filenames'  => get_post_meta( $this->config_page_id, $this->gpx_filenames_meta_key, true ),
+						'color_list' => get_post_meta( $this->config_page_id, $this->gpx_colors_meta_key, true ),
 					);
 				} else {
 					return $this->all_gpx_do_loop( $this->config_page_id, $file_gpx_count );
@@ -200,9 +200,11 @@ class OSM_Custom {
 
 		$js_data = array();
 
-		if ( have_posts() ) :
-			while ( have_posts() ) :
-				the_post();
+		$all_posts_query = BTT_Utilities::all_posts_query();
+
+		if ( $all_posts_query->have_posts() ) :
+			while ( $all_posts_query->have_posts() ) :
+				$all_posts_query->the_post();
 				$fields = get_fields();
 
 				if ( ! empty( $fields['day_number'] && ! $fields['miles_and_elevation']['rest_day'] ) ) {
@@ -229,8 +231,8 @@ class OSM_Custom {
 		$filenames_list = rtrim( $filenames_list, ',' );
 		$color_list     = rtrim( $color_list, ',' );
 
-		update_post_meta( $this->config_page_id, $this->osm_filenames_meta_key, $filenames_list );
-		update_post_meta( $this->config_page_id, $this->osm_colors_meta_key, $color_list );
+		update_post_meta( $this->config_page_id, $this->gpx_filenames_meta_key, $filenames_list );
+		update_post_meta( $this->config_page_id, $this->gpx_colors_meta_key, $color_list );
 		update_post_meta( $this->config_page_id, $this->gpx_file_count_meta_key, $file_gpx_count );
 		update_post_meta( $this->config_page_id, $this->gpx_js_data_meta_key, $js_data );
 
