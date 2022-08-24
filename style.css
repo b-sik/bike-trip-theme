@@ -173,6 +173,11 @@ img {
   display: flex;
   justify-content: center;
 }
+
+cite {
+  font-size: small;
+}
+
 /* 
 .nav-links > .current:first-child {
   margin-left: auto;
