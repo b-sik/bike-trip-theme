@@ -27,13 +27,17 @@ $bs_wp->get_template_parts(
 		the_post();
 		$fields        = get_fields();
 		$day_number    = $fields['day_number'];
-		$multiple_days = $fields['multiple_days'];
 		$date          = $fields['date'];
 		$weather       = $fields['weather'];
 		$start_loc     = $fields['locations']['start'];
 		$single_loc    = $fields['locations']['single'];
 		$rest_day      = $fields['miles_and_elevation']['rest_day'];
 		$stats         = $fields['miles_and_elevation'];
+
+		$multiple_days = false; 
+		if ( isset( $fields['multiple_days'] ) ) {
+			$multiple_days = $fields['multiple_days'];
+		}
 
 		if ( ! $single_loc ) {
 			$end_loc = $fields['locations']['end'];
