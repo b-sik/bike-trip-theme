@@ -169,7 +169,18 @@ img {
 }
 
 .page-numbers {
-  margin: 0 .25rem;
+  margin: 0 .5rem;
+  font-size: large;
+}
+
+@media (max-width: 767px) {
+  .pagination-numbers {
+    position: static !important;
+    transform: none !important;
+    width: 100%;
+    margin: 1rem 0;
+    text-align: center;
+  }
 }
 
 cite {
