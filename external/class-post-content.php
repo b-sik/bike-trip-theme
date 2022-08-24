@@ -296,6 +296,10 @@ class Post_Content {
 	public function get_image_orientation( $image ) {
 		$dimensions = $this->get_image_dimensions( $image );
 
+		if ( $dimensions === false ) {
+			return 'portrait';
+		}
+
 		if ( $dimensions['w'] > $dimensions['h'] ) {
 			return 'landscape';
 		} elseif ( $dimensions['w'] === $dimensions['h'] ) {
@@ -315,6 +319,10 @@ class Post_Content {
 		$str = $this->get_string_between( $image['innerHTML'], '<img src="', '.jpeg' );
 
 		$explode_x = explode( 'x', $str );
+		
+		if ( count( $explode_x ) !== 2 ) {
+			return false;
+		}
 
 		$height = array_pop( $explode_x );
 		$width  = array_pop( explode( '-', $explode_x[0] ) );
