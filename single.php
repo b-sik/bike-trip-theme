@@ -103,18 +103,16 @@ $bs_wp->get_template_parts(
 			<div id="post-page-nav" class="row">
 				<div class="col-6">
 				<?php
-				$prev_id = get_previous_post()->ID;
-				if ( $prev_id ) {
+				if ( isset( get_next_post()->ID ) ) {
 					?>
-					<a href="<?php echo esc_url( get_permalink( $prev_id ) ); ?>">&larr; previous post</a>
+					<a href="<?php echo esc_url( get_permalink( get_next_post()->ID ) ); ?>">&larr; next post</a>
 				<?php } ?>
 				</div>
 				<div class="col-6 text-end">
 				<?php
-				$next_id = get_next_post()->ID;
-				if ( $next_id ) {
+				if ( isset( get_previous_post()->ID ) ) {
 					?>
-					<a href="<?php echo esc_url( get_permalink( $next_id ) ); ?>">next post &rarr;</a>
+					<a href="<?php echo esc_url( get_permalink( get_previous_post()->ID ) ); ?>">previous post &rarr;</a>
 				<?php } ?>
 				</div>
 			</div>
