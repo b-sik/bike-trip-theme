@@ -100,6 +100,15 @@ $post_excerpt_length = $fields['post_excerpt_length']
 				</div>
 				<?php
 				endwhile;
+				echo '<div class="col-12 d-flex justify-content-center">';
+				the_posts_pagination(
+					array(
+						'mid_size'  => 2,
+						'prev_text' => '&larr; More Recent Posts',
+						'next_text' => 'Relive the Journey &rarr;',
+					)
+				);
+				echo '</div>';
 		endif;
 		?>
 	</div>

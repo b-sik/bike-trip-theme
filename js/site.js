@@ -15,9 +15,30 @@ Array.from(blockquotes).forEach((blockquote) => {
   blockquote.lastChild.classList.add('blockquote-footer');
 });
 
-jQuery(function ($) {
-  // jQuery here
+
+// pagination
+const paginationNav = document.querySelector('.nav-links');
+const itemsForDiv = document.querySelectorAll(
+  '.nav-links > .page-numbers:not(.next):not(.prev)'
+);
+
+const newDiv = document.createElement('div');
+newDiv.classList.add('newdiv');
+
+itemsForDiv.forEach((item) => {
+  newDiv.append(item);
 });
+
+const prev = document.querySelector('.page-numbers.prev');
+const next = document.querySelector('.page-numbers.next');
+
+if (prev && next) {
+  paginationNav.insertBefore(newDiv, next);
+} else if (prev) {
+  paginationNav.append(newDiv);
+} else if (next) {
+  paginationNav.prepend(newDiv);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   const osm = new OsmTrackPopups();
