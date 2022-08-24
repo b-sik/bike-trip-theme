@@ -168,30 +168,11 @@ img {
   min-width: 100%;
 }
 
-.nav-links {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+.page-numbers {
+  margin: 0 .25rem;
 }
 
 cite {
   font-size: small;
 }
 
-/* 
-.nav-links > .current:first-child {
-  margin-left: auto;
-}
-
-.page-numbers {
-  padding: 0.5rem;
-}
-
-.prev.page-numbers {
-  min-width: 25%;
-}
-
-.next.page-numbers {
-  min-width: 25%;
-  margin-left: auto;
-} */
