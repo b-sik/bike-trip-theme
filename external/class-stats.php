@@ -85,15 +85,11 @@ class Stats {
 		$elev_loss   = 0;
 		$flats       = 0;
 
-		$args = array(
-			'post_type' => 'post',
-		);
+		$all_posts_query = BTT_Utilities::all_posts_query();
 
-		$post_query = new WP_Query( $args );
-
-		if ( $post_query->have_posts() ) {
-			while ( $post_query->have_posts() ) {
-				$post_query->the_post();
+		if ( $all_posts_query->have_posts() ) {
+			while ( $all_posts_query->have_posts() ) {
+				$all_posts_query->the_post();
 				$fields = get_fields();
 				$stats  = $fields['miles_and_elevation'];
 

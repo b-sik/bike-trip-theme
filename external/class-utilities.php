@@ -27,6 +27,20 @@ class BTT_Utilities {
 	}
 
 	/**
+	 * All posts query object.
+	 *
+	 * @return object
+	 */
+	public static function all_posts_query() {
+		$args = array(
+			'posts_per_page'   => -1,
+			'post_type'        => 'post',
+		);
+
+		return new WP_Query( $args );
+	}
+
+	/**
 	 * Content excerpt.
 	 *
 	 * @param int                    $length Number of characters.
