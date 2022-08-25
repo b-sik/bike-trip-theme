@@ -48,12 +48,10 @@ export class BTT_Pagination {
   addAnchorLink = () => {
     if (this.prev) {
       const href = this.prev.attributes.href.value;
-      console.log(href);
       this.prev.setAttribute('href', href + '#posts-header');
     }
     if (this.next) {
       const href = this.next.attributes.href.value;
-      console.log(href);
       this.next.setAttribute('href', href + '#posts-header');
     }
   }
