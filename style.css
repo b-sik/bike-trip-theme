@@ -8,6 +8,10 @@ Author URI: 	https://www.babobski.nl
 Tags: 			babobski, bootstrap, basic theme
 */
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Raleway', sans-serif;
 }
