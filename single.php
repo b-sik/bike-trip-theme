@@ -27,13 +27,17 @@ $bs_wp->get_template_parts(
 		the_post();
 		$fields        = get_fields();
 		$day_number    = $fields['day_number'];
-		$multiple_days = $fields['multiple_days'];
 		$date          = $fields['date'];
 		$weather       = $fields['weather'];
 		$start_loc     = $fields['locations']['start'];
 		$single_loc    = $fields['locations']['single'];
 		$rest_day      = $fields['miles_and_elevation']['rest_day'];
 		$stats         = $fields['miles_and_elevation'];
+
+		$multiple_days = false; 
+		if ( isset( $fields['multiple_days'] ) ) {
+			$multiple_days = $fields['multiple_days'];
+		}
 
 		if ( ! $single_loc ) {
 			$end_loc = $fields['locations']['end'];
@@ -103,18 +107,16 @@ $bs_wp->get_template_parts(
 			<div id="post-page-nav" class="row">
 				<div class="col-6">
 				<?php
-				$prev_id = get_previous_post()->ID;
-				if ( $prev_id ) {
+				if ( isset( get_next_post()->ID ) ) {
 					?>
-					<a href="<?php echo esc_url( get_permalink( $prev_id ) ); ?>">&larr; previous post</a>
+					<a href="<?php echo esc_url( get_permalink( get_next_post()->ID ) ); ?>">&larr; next post</a>
 				<?php } ?>
 				</div>
 				<div class="col-6 text-end">
 				<?php
-				$next_id = get_next_post()->ID;
-				if ( $next_id ) {
+				if ( isset( get_previous_post()->ID ) ) {
 					?>
-					<a href="<?php echo esc_url( get_permalink( $next_id ) ); ?>">next post &rarr;</a>
+					<a href="<?php echo esc_url( get_permalink( get_previous_post()->ID ) ); ?>">previous post &rarr;</a>
 				<?php } ?>
 				</div>
 			</div>
