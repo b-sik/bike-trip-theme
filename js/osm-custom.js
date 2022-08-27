@@ -38,8 +38,6 @@ export class OsmTrackPopups {
   popupInnerHTML = (gpx, type) => {
     const { permalink, fields, next_page, prev_page } = gpx;
 
-    console.log(gpx);
-
     this.targetNode.parentElement.classList.remove('ol-popup');
     this.targetNode.parentElement.classList.add('card');
 
