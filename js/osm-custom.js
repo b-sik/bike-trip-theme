@@ -16,7 +16,7 @@ export class OsmTrackPopups {
   postTitleAndLink = (data, type) => {
     const { permalink, fields } = data;
 
-    const title = fields.locations.single
+    const title = fields.locations?.single
       ? fields.locations.start
       : fields.locations.start + ' to ' + fields.locations.end;
 
@@ -37,6 +37,8 @@ export class OsmTrackPopups {
 
   popupInnerHTML = (gpx, type) => {
     const { permalink, fields, next_page, prev_page } = gpx;
+
+    console.log(gpx);
 
     this.targetNode.parentElement.classList.remove('ol-popup');
     this.targetNode.parentElement.classList.add('card');
@@ -75,7 +77,7 @@ export class OsmTrackPopups {
           )}
           <br />
           ${cardText('or travel back to...')}
-          ${this.postTitleAndLink(fields, 'marker')}
+          ${this.postTitleAndLink({ permalink, fields }, 'marker')}
         `;
         break;
       case 'segment':
