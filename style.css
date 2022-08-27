@@ -98,7 +98,18 @@ body {
   color: #ff8bfa;
 }
 
+#map_ol3js_1_popup {
+  position: absolute;
+  bottom: 0px;
+  left: -50px;
+  min-width: 15rem;
+}
+
 .card {
+  font-size: smaller;
+}
+
+.card.post-card {
   height: 15rem;
   max-height: 15rem;
   overflow: hidden;
@@ -158,14 +169,6 @@ body {
 video,
 img {
   max-height: 90vh;
-}
-
-#map_ol3js_1_popup {
-  position: absolute;
-  bottom: 0px;
-  left: -50px;
-  min-width: 15rem;
-  height: 8rem !important;
 }
 
 .navigation.pagination {

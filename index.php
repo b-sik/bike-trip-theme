@@ -71,7 +71,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 				}
 				?>
 				<div class="col-12 col-md-6 col-lg-5">
-					<div class="card bg-dark text-white text-decoration-none" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
+					<div class="card post-card bg-dark text-white text-decoration-none" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
 							<?php if ( ! empty( get_the_post_thumbnail_url() ) ) : ?>
 								<img class="card-img" src="<?php echo esc_attr( get_the_post_thumbnail_url() ); ?>" alt="Card image" />
 							<?php endif; ?>

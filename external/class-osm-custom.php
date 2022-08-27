@@ -31,11 +31,18 @@ class OSM_Custom {
 	public $colors = array( 'blue', 'green', 'red', 'grey', 'black', 'purple', 'yellow', 'orange' );
 
 	/**
-	 * Post meta key - gpx names.
+	 * Post meta key - gpx waypoint names.
 	 *
 	 * @var string GPX names post meta key.
 	 */
 	public $gpx_names_meta_key = '__gpx_meta_names';
+
+	/**
+	 * Post meta key - gpx waypoint description.
+	 *
+	 * @var string GPX description post meta key.
+	 */
+	public $gpx_descs_meta_key = '__gpx_meta_descs';
 
 	/**
 	 * Post meta key - filenames list.
@@ -276,8 +283,9 @@ class OSM_Custom {
 	 * @param array $filename Dir and url filenames.
 	 * @return array
 	 */
-	public function get_gpx_waypoint_names( $filename ) {
+	public function get_gpx_wpt_data( $filename ) {
 		$names          = array();
+		$descs          = array();
 		$wpts_to_remove = array();
 
 		$gpx = new DOMDocument();
@@ -292,6 +300,9 @@ class OSM_Custom {
 				foreach ( $wpt->childNodes as $node ) { // phpcs:ignore
 					if ( 'name' === $node->tagName ) { // phpcs:ignore
 						$names[] = $node->nodeValue; // phpcs:ignore
+					}
+					if ( 'desc' === $node->tagName ) { // phpcs:ignore
+						$descs[] = $node->nodeValue; // phpcs:ignore
 					}
 				}
 				// remove all other waypoints.
@@ -308,7 +319,10 @@ class OSM_Custom {
 			$gpx->save( $filename['dir'] );
 		}
 
-		return $names;
+		return array(
+			'names' => $names,
+			'descs' => $descs,
+		);
 	}
 
 	/**
@@ -322,20 +336,44 @@ class OSM_Custom {
 	 */
 	public function get_gpx_post_data( $filename, $fields ) {
 		$names = array();
+		$descs = array();
 
 		if ( ! metadata_exists( 'post', get_the_ID(), $this->gpx_names_meta_key ) ) {
-			$names = $this->get_gpx_waypoint_names( $filename );
+			$wpt_data = $this->get_gpx_wpt_data( $filename );
+			$names    = $wpt_data['names'];
+			$descs    = $wpt_data['descs'];
+
 			update_post_meta( get_the_ID(), $this->gpx_names_meta_key, $names );
+			update_post_meta( get_the_ID(), $this->gpx_descs_meta_key, $descs );
 		} else {
 			$names = get_post_meta( get_the_ID(), $this->gpx_names_meta_key, true );
+			$descs = get_post_meta( get_the_ID(), $this->gpx_descs_meta_key, true );
 		}
+
+		$next_page_id = get_next_post()->ID;
+		$prev_page_id = get_previous_post()->ID;
 
 		$data = (object) array(
 			'post_id'   => get_the_ID(),
 			'permalink' => get_the_permalink(),
 			'fields'    => $fields,
 			'names'     => $names,
+			'descs'     => $descs,
 		);
+
+		if ( ! empty( $next_page_id ) ) {
+			$data->next_page = array(
+				'fields'    => get_fields( $next_page_id ),
+				'permalink' => get_the_permalink( $next_page_id ),
+			);
+		}
+
+		if ( ! empty( $prev_page_id ) ) {
+			$data->prev_page = array(
+				'fields'    => get_fields( $prev_page_id ),
+				'permalink' => get_the_permalink( $prev_page_id ),
+			);
+		}
 
 		return $data;
 	}
