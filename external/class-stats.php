@@ -69,6 +69,14 @@ class Stats {
 		}
 	}
 
+	/**
+	 * Get the ID of the most recent post.
+	 * Used to determine if an update is needed.
+	 *
+	 * @link https://wordpress.stackexchange.com/a/280192
+	 *
+	 * @return int ID
+	 */
 	public function get_last_post_id() {
 		global $wpdb;
 
