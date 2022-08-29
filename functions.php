@@ -300,6 +300,9 @@ function allowed_block_types( $block_editor_context, $editor_context ) {
 
 add_filter( 'allowed_block_types_all', 'allowed_block_types', 10, 2 );
 
+$filter_image_block = new Post_Content();
+$filter_image_block->init();
+
 /**
  * https://stackoverflow.com/questions/58931144/enqueue-javascript-with-type-module
  */

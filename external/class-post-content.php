@@ -19,6 +19,32 @@ class Post_Content {
 
 	}
 
+	public function init() {
+		add_filter( 'render_block', array( $this, 'filter_image_block' ), 10, 2 );
+	}
+
+	public function filter_image_block( $block_content, $block ) {
+		if ( 'core/image' === $block['blockName'] ) {
+
+			$url    = $this->get_string_between( $block['innerHTML'], '<img src="', '"' );
+			$anchor = '<a href="' . $url . '">';
+
+			$separator     = '<img';
+			$exploded_html = explode( $separator, $block['innerHTML'] );
+
+			$separator_2            = '"/>';
+			$exploded_exploded_html = explode( $separator_2, $exploded_html[1] );
+
+			$inner_html = $exploded_html[0] . $anchor . $separator . $exploded_exploded_html[0] . $separator_2 . '</a>' . $exploded_exploded_html[1];
+
+			$block_content = $inner_html;
+
+			return $block_content;
+		}
+
+		return $block_content;
+	}
+
 	/**
 	 * Display content with layouts.
 	 *
@@ -316,16 +342,16 @@ class Post_Content {
 	 * @return array
 	 */
 	public function get_image_dimensions( $image ) {
-		$str = $this->get_string_between( $image['innerHTML'], '<img src="', '.jpeg' );
+		$str = $this->get_string_between( $image['innerHTML'], '<img src="', ' . jpeg' );
 
 		$explode_x = explode( 'x', $str );
-		
+
 		if ( count( $explode_x ) !== 2 ) {
 			return false;
 		}
 
 		$height = array_pop( $explode_x );
-		$width  = array_pop( explode( '-', $explode_x[0] ) );
+		$width  = array_pop( explode( ' - ', $explode_x[0] ) );
 
 		return array(
 			'w' => $width,
