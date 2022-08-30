@@ -19,10 +19,21 @@ class Post_Content {
 
 	}
 
+	/**
+	 * Init.
+	 */
 	public function init() {
 		add_filter( 'render_block', array( $this, 'filter_image_block' ), 10, 2 );
 	}
 
+	/**
+	 * Adds a media anchor tag to image so lightbox plugin works.
+	 *
+	 * @param mixed $block_content Block content.
+	 * @param mixed $block Block.
+	 *
+	 * @return mixed
+	 */
 	public function filter_image_block( $block_content, $block ) {
 		if ( 'core/image' === $block['blockName'] ) {
 
