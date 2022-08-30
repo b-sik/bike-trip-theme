@@ -350,8 +350,8 @@ class OSM_Custom {
 			$descs = get_post_meta( get_the_ID(), $this->gpx_descs_meta_key, true );
 		}
 
-		$next_page_id = get_next_post()->ID;
-		$prev_page_id = get_previous_post()->ID;
+		$next_page = get_next_post();
+		$prev_page = get_previous_post();
 
 		$data = (object) array(
 			'post_id'   => get_the_ID(),
@@ -361,17 +361,17 @@ class OSM_Custom {
 			'descs'     => $descs,
 		);
 
-		if ( ! empty( $next_page_id ) ) {
+		if ( ! empty( $next_page ) ) {
 			$data->next_page = array(
-				'fields'    => get_fields( $next_page_id ),
-				'permalink' => get_the_permalink( $next_page_id ),
+				'fields'    => get_fields( $next_page->ID ),
+				'permalink' => get_the_permalink( $next_page->ID ),
 			);
 		}
 
-		if ( ! empty( $prev_page_id ) ) {
+		if ( ! empty( $prev_page ) ) {
 			$data->prev_page = array(
-				'fields'    => get_fields( $prev_page_id ),
-				'permalink' => get_the_permalink( $prev_page_id ),
+				'fields'    => get_fields( $prev_page->ID ),
+				'permalink' => get_the_permalink( $prev_page->ID ),
 			);
 		}
 
