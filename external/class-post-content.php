@@ -74,7 +74,7 @@ class Post_Content {
 		foreach ( $blocks as $block ) {
 			$blocks_in_queue = array_column( $block_queue, 'blockName' );
 
-			if ( 'core/paragraph' === $block['blockName'] && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
+			if ( ( 'core/paragraph' === $block['blockName'] || 'core/heading' === $block['blockName'] ) && in_array( 'core/paragraph', $blocks_in_queue, true ) ) {
 				$this->output_blocks_with_layouts( $block_queue );
 				$block_queue = array( $block );
 			} else {
