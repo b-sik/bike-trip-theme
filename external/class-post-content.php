@@ -155,50 +155,46 @@ class Post_Content {
 		ob_start();
 
 		echo '<div class="row my-4">';
+		$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
 		if ( count( $images ) === 1 ) {
 			switch ( $this->get_image_orientation( $images[0] ) ) {
 				case 'landscape':
-					$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-					$this->echo_blocks( $text_blocks, 'col-12' );
+					$this->echo_blocks( $text_blocks );
 					$this->echo_block( $images[0], 'col-12' );
 					$this->echo_block( $video );
 					break;
 				default:
-					$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-					$this->echo_blocks( $text_blocks, 'col-12 col-md-6' );
+					$this->echo_blocks( $text_blocks, 'col-md-6' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 					$this->echo_blocks( $video );
 					break;
 			}
 		} elseif ( count( $images ) === 2 ) {
 			if ( $this->all_images_same_orientation( $images ) ) {
-				$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-				$this->echo_blocks( $text_blocks, 'col-12' );
+
+				$this->echo_blocks( $text_blocks );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 col-md-6 my-1' );
 				$this->echo_blocks( $video );
 
 			} else {
 				$images = $this->order_landscape_last( $images );
-				$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-				$this->echo_blocks( $text_blocks, 'col-12 col-md-6 my-1' );
+
+				$this->echo_blocks( $text_blocks, 'col-md-6 my-1' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 my-1 mt-md-5' );
 				$this->echo_blocks( $video );
 			}
 		} elseif ( count( $images ) === 3 ) {
-			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $text_blocks );
 			$this->echo_blocks( $images, 'col-12 col-md-4 my-1' );
 			$this->echo_blocks( $video );
 		} elseif ( count( $images ) === 4 ) {
-			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $text_blocks );
 			$this->echo_blocks( $images, 'col-12 col-md-6 my-1' );
 			$this->echo_blocks( $video );
 		} else {
-			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
-			$this->echo_blocks( $text_blocks, 'col-12' );
+			$this->echo_blocks( $text_blocks );
 			$this->echo_blocks( $images, 'col-12 col-md-6 col-lg-4 my-1' );
 			$this->echo_blocks( $video );
 		}
@@ -242,7 +238,7 @@ class Post_Content {
 		} elseif ( 'core/video' === $block_name ) {
 			$wrapper_class .= ' col-10 offset-1 my-3';
 		} elseif ( 'core/paragraph' === $block_name || 'core/list' === $block_name || 'core/table' === $block_name ) {
-			$wrapper_class .= ' col-12 col-md-6';
+			$wrapper_class .= ' col-12';
 		} elseif ( 'core/heading' === $block_name ) {
 			$wrapper_class = ' col-12 text-center mt-2 mb-3';
 		}
