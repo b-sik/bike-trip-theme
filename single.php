@@ -25,16 +25,16 @@ $bs_wp->get_template_parts(
 	<?php
 	if ( have_posts() ) :
 		the_post();
-		$fields        = get_fields();
-		$day_number    = $fields['day_number'];
-		$date          = $fields['date'];
-		$weather       = $fields['weather'];
-		$start_loc     = $fields['locations']['start'];
-		$single_loc    = $fields['locations']['single'];
-		$rest_day      = $fields['miles_and_elevation']['rest_day'];
-		$stats         = $fields['miles_and_elevation'];
+		$fields     = get_fields();
+		$day_number = $fields['day_number'];
+		$date       = $fields['date'];
+		$weather    = $fields['weather'];
+		$start_loc  = $fields['locations']['start'];
+		$single_loc = $fields['locations']['single'];
+		$rest_day   = $fields['miles_and_elevation']['rest_day'];
+		$stats      = $fields['miles_and_elevation'];
 
-		$multiple_days = false; 
+		$multiple_days = false;
 		if ( isset( $fields['multiple_days'] ) ) {
 			$multiple_days = $fields['multiple_days'];
 		}
@@ -68,7 +68,9 @@ $bs_wp->get_template_parts(
 
 					<?php
 					if ( $rest_day ) {
-						echo '<li>Rest Day</li>';
+						?>
+						<li>Rest Day<?php echo $multiple_days ? 's' : ''; ?>
+						<?php
 					} else {
 						echo esc_html( $stats['miles'] . ' Miles' );
 						echo '<li>↑ ' . number_format( $stats['elevation_gain'] ) . ' ft ↓ ' . number_format( $stats['elevation_loss'] ) . ' ft</li>';
@@ -88,7 +90,7 @@ $bs_wp->get_template_parts(
 					<?php } ?>
 
 					<?php if ( $single_loc ) { ?>
-						<h3>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
+						<h3>REST DAY<?php echo $multiple_days ? 'S' : ''; ?> in <?php echo esc_html( strtoupper( $start_loc ) ); ?></h3>
 					<?php } else { ?>
 						<h3>
 							<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>

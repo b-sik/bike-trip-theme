@@ -57,7 +57,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 				$single_loc    = $post_fields['locations']['single'];
 				$end_loc       = $post_fields['locations']['end'];
 
-				$multiple_days = false; 
+				$multiple_days = false;
 				if ( isset( $post_fields['multiple_days'] ) ) {
 					$multiple_days = $post_fields['multiple_days'];
 				}
@@ -69,6 +69,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 				if ( $multiple_days ) {
 					$end_day_number = $post_fields['end_day_number'];
 				}
+
 				?>
 				<div class="col-12 col-md-6 col-lg-5">
 					<div class="card post-card bg-dark text-white text-decoration-none" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
@@ -84,7 +85,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 									<?php } ?>
 
 									<?php if ( $single_loc ) { ?>
-									<span>REST DAY in <?php echo esc_html( strtoupper( $start_loc ) ); ?></span>
+									<span>REST DAY<?php echo $multiple_days ? 'S' : ''; ?>  in <?php echo esc_html( strtoupper( $start_loc ) ); ?></span>
 									<?php } else { ?>
 										<span>
 											<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
