@@ -13,13 +13,6 @@
  */
 class Post_Content {
 	/**
-	 * Previous block name.
-	 *
-	 * @var string Previous block name.
-	 */
-	// public $prev_block_name = '';
-
-	/**
 	 * Construct.
 	 */
 	public function __construct() {
@@ -104,6 +97,7 @@ class Post_Content {
 	 * @return array
 	 */
 	public function process_block_queue( $blocks ) {
+		$heading     = array();
 		$text_blocks = array();
 		$images      = array();
 		$video       = array();
@@ -111,7 +105,7 @@ class Post_Content {
 		foreach ( $blocks as $block ) {
 			switch ( $block['blockName'] ) {
 				case 'core/heading':
-					$text_blocks[] = $block;
+					$heading[] = $block;
 					break;
 				case 'core/paragraph':
 					$text_blocks[] = $block;
@@ -137,6 +131,7 @@ class Post_Content {
 		}
 
 		return array(
+			'heading'     => $heading,
 			'text-blocks' => $text_blocks,
 			'images'      => $images,
 			'video'       => $video,
@@ -152,6 +147,7 @@ class Post_Content {
 	public function output_blocks_with_layouts( $blocks ) {
 		$blocks = $this->process_block_queue( $blocks );
 
+		$heading     = $blocks['heading'];
 		$text_blocks = $blocks['text-blocks'];
 		$images      = $blocks['images'];
 		$video       = $blocks['video'];
@@ -162,39 +158,47 @@ class Post_Content {
 		if ( count( $images ) === 1 ) {
 			switch ( $this->get_image_orientation( $images[0] ) ) {
 				case 'landscape':
+					$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
 					$this->echo_blocks( $text_blocks, 'col-12' );
 					$this->echo_block( $images[0], 'col-12' );
 					$this->echo_block( $video );
 					break;
 				default:
-					$this->echo_blocks( $text_blocks, 'col-md-6' );
+					$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+					$this->echo_blocks( $text_blocks, 'col-12 col-md-6' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 					$this->echo_blocks( $video );
 					break;
 			}
 		} elseif ( count( $images ) === 2 ) {
 			if ( $this->all_images_same_orientation( $images ) ) {
+				$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
 				$this->echo_blocks( $text_blocks, 'col-12' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 col-md-6 my-1' );
 				$this->echo_blocks( $video );
+
 			} else {
 				$images = $this->order_landscape_last( $images );
-				$this->echo_blocks( $text_blocks, 'col-md-6 my-1' );
+				$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+				$this->echo_blocks( $text_blocks, 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 my-1 mt-md-5' );
 				$this->echo_blocks( $video );
 			}
 		} elseif ( count( $images ) === 3 ) {
-			$this->echo_blocks( $text_blocks );
+			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-4 my-1' );
 			$this->echo_blocks( $video );
 		} elseif ( count( $images ) === 4 ) {
-			$this->echo_blocks( $text_blocks );
+			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-6 my-1' );
 			$this->echo_blocks( $video );
 		} else {
-			$this->echo_blocks( $text_blocks );
+			$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+			$this->echo_blocks( $text_blocks, 'col-12' );
 			$this->echo_blocks( $images, 'col-12 col-md-6 col-lg-4 my-1' );
 			$this->echo_blocks( $video );
 		}
@@ -234,13 +238,13 @@ class Post_Content {
 	 */
 	public function apply_block_specific_styles( $block_name, $wrapper_class ) {
 		if ( 'core/quote' === $block_name ) {
-			$wrapper_class .= ' my-auto col-12';
+			$wrapper_class .= ' my-auto col-12 col-md-6';
 		} elseif ( 'core/video' === $block_name ) {
 			$wrapper_class .= ' col-10 offset-1 my-3';
 		} elseif ( 'core/paragraph' === $block_name || 'core/list' === $block_name || 'core/table' === $block_name ) {
-			$wrapper_class .= ' col-12';
+			$wrapper_class .= ' col-12 col-md-6';
 		} elseif ( 'core/heading' === $block_name ) {
-			$wrapper_class = ' col-12 text-center mt-3 mb-2';
+			$wrapper_class = ' col-12 text-center mt-2 mb-3';
 		}
 
 		return $wrapper_class;
