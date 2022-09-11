@@ -41,7 +41,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 	</div>
 </section>
 <section id="all_posts" class="container min-vh-100 mt-2 mb-5">
-	<div class="row g-4 g-lg-5 justify-content-center mt-3">
+	<div class="row g-4 justify-content-center mt-3">
 		<div class="col-12 col-lg-10">	
 			<h3 id="posts-header" class="text-center mt-3 mb-3"><?php echo esc_html( strtoupper( 'Keeping Up With The Wheelie Babes' ) ); ?></h3>
 		<hr />
@@ -51,11 +51,11 @@ $post_excerpt_length = $fields['post_excerpt_length']
 		if ( have_posts() ) :
 			while ( have_posts() ) :
 				the_post();
-				$post_fields   = get_fields();
-				$day_number    = $post_fields['day_number'];
-				$start_loc     = $post_fields['locations']['start'];
-				$single_loc    = $post_fields['locations']['single'];
-				$end_loc       = $post_fields['locations']['end'];
+				$post_fields = get_fields();
+				$day_number  = $post_fields['day_number'];
+				$start_loc   = $post_fields['locations']['start'];
+				$single_loc  = $post_fields['locations']['single'];
+				$end_loc     = $post_fields['locations']['end'];
 
 				$multiple_days = false;
 				if ( isset( $post_fields['multiple_days'] ) ) {
@@ -72,12 +72,12 @@ $post_excerpt_length = $fields['post_excerpt_length']
 
 				?>
 				<div class="col-12 col-md-6 col-lg-5">
-					<div class="card post-card bg-dark text-white text-decoration-none" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
+					<div class="card post-card bg-dark text-white text-decoration-none rounded-0 border-0" onclick="location.href='<?php the_permalink(); ?>';" style="cursor:pointer">
 							<?php if ( ! empty( get_the_post_thumbnail_url() ) ) : ?>
 								<img class="card-img" src="<?php echo esc_attr( get_the_post_thumbnail_url() ); ?>" alt="Card image" />
 							<?php endif; ?>
-							<div class="card-img-overlay d-flex flex-column justify-content-start">
-								<h4 class="card-title">
+							<div class="card-img-overlay d-flex flex-column justify-content-start rounded-0 border-0">
+								<h4 class="card-title pb-3">
 									<?php if ( $multiple_days ) { ?>
 										<span class="d-block">DAYS <?php echo esc_html( $day_number . ' - ' . $end_day_number ); ?> </span>
 									<?php } else { ?>

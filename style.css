@@ -122,7 +122,12 @@ body {
 
 .card:hover .card-img-overlay {
   transition: all 0.2s ease-in-out;
-  background-color: #584b53;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+}
+
+.card:hover .card-title {
+  border-bottom: 1px solid black;
 }
 
 .card-text {
