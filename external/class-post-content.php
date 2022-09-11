@@ -155,7 +155,7 @@ class Post_Content {
 		ob_start();
 
 		echo '<div class="row my-4">';
-		$this->echo_blocks( $heading, 'col-12 text-center pt-3 pb-2' );
+		$this->echo_blocks( $heading, 'col-12 text-center pt-2 pb-2' );
 		if ( count( $images ) === 1 ) {
 			switch ( $this->get_image_orientation( $images[0] ) ) {
 				case 'landscape':
@@ -164,7 +164,7 @@ class Post_Content {
 					$this->echo_block( $video );
 					break;
 				default:
-					$this->echo_blocks( $text_blocks, 'col-md-6' );
+					$this->echo_blocks( $text_blocks, 'col-md-6 pt-2' );
 					$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 					$this->echo_blocks( $video );
 					break;
@@ -180,7 +180,7 @@ class Post_Content {
 			} else {
 				$images = $this->order_landscape_last( $images );
 
-				$this->echo_blocks( $text_blocks, 'col-md-6 my-1' );
+				$this->echo_blocks( $text_blocks, 'col-md-6 my-1 pt-2' );
 				$this->echo_block( $images[0], 'col-12 col-md-6 my-1' );
 				$this->echo_block( $images[1], 'col-12 my-1 mt-md-5' );
 				$this->echo_blocks( $video );
