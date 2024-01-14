@@ -14,7 +14,7 @@ define( 'BOOTSTRAP_VERSION', '5.1.3' );
 define( 'BOOTSTRAP_ICON_VERSION', '1.8.2' );
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	01. Add language support to theme
 
@@ -23,11 +23,11 @@ define( 'BOOTSTRAP_ICON_VERSION', '1.8.2' );
 add_action( 'after_setup_theme', 'my_theme_setup' );
 
 function my_theme_setup() {
-	 load_theme_textdomain( 'wp_babobski', get_template_directory() . '/language' );
+	load_theme_textdomain( 'wp_babobski', get_template_directory() . '/language' );
 }
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	02. Required external files
 
@@ -42,7 +42,7 @@ require_once 'external/class-post-content.php';
 require_once 'external/class-config.php';
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
     03. Add html 5 support to WordPress elements
 
@@ -60,7 +60,7 @@ add_theme_support(
 );
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	04. Theme specific settings
 
@@ -77,7 +77,7 @@ register_nav_menus(
 );
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	05. Actions and Filters
 
@@ -89,7 +89,7 @@ $BsWp = new BsWp();
 add_filter( 'body_class', array( $BsWp, 'add_slug_to_body_class' ) );
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	06. Custom Post Types - include custom post types and taxonomies here e.g.
 
@@ -100,7 +100,7 @@ add_filter( 'body_class', array( $BsWp, 'add_slug_to_body_class' ) );
 
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	07. Scripts
 
@@ -127,7 +127,7 @@ if ( ! function_exists( 'bootstrap_script_init' ) ) {
 }
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	08. Security & cleanup wp admin
 
@@ -179,7 +179,7 @@ remove_action( 'welcome_panel', 'wp_welcome_panel' );
 // Disable the emoji's
 if ( ! function_exists( 'disable_emojis' ) ) {
 	function disable_emojis() {
-		 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 		remove_action( 'admin_print_styles', 'print_emoji_styles' );
@@ -206,13 +206,13 @@ add_action( 'admin_head', 'custom_logo_guttenberg' );
 
 if ( ! function_exists( 'custom_logo_guttenberg' ) ) {
 	function custom_logo_guttenberg() {
-		 echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo( 'stylesheet_directory' ) .
+		echo '<link rel="stylesheet" type="text/css" href="' . get_bloginfo( 'stylesheet_directory' ) .
 			'/css/admin-custom.css?v=1.0.0" />';
 	}
 }
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	09. Disabeling Guttenberg
 
@@ -232,7 +232,7 @@ if ( ! function_exists( 'custom_logo_guttenberg' ) ) {
 // add_action('wp_enqueue_scripts', 'smartwp_remove_wp_block_library_css', 100);
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	10. Custom login
 
@@ -264,7 +264,7 @@ add_filter( 'login_headertext', 'my_login_logo_url_title' );
 
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	11. Comments
 
@@ -296,7 +296,7 @@ if ( ! function_exists( 'bootstrap_comment' ) ) {
 }
 
 /*
-	 ========================================================================================================================
+	========================================================================================================================
 
 	12. Bike Trip Theme functions
 
@@ -304,3 +304,12 @@ if ( ! function_exists( 'bootstrap_comment' ) ) {
 
 	$config = new BTT_Config();
 	$config->init();
+
+function external_mediaurl( $wp_get_attachment_url ) {
+	$external_mediadir = 'https://bsik-media.nyc3.digitaloceanspaces.com/wheelie-babes/';
+	$filename          = basename( $wp_get_attachment_url );
+	$newurl            = $external_mediadir . $filename;
+	return $newurl;
+}
+
+add_filter( 'wp_get_attachment_url', 'external_mediaurl' );

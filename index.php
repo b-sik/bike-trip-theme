@@ -14,8 +14,8 @@
  */
 
 $bs_wp = new BsWp();
-$osm   = new OSM_Custom();
-$util  = new BTT_Utilities();
+// $osm   = new OSM_Custom();
+$util = new BTT_Utilities();
 
 $bs_wp->get_template_parts(
 	array(
@@ -34,7 +34,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 			<h3 class="pb-2"><?php echo esc_html( strtoupper( 'Track Our Progress' ) ); ?></h3>
 			<small class="py-3 text-center d-block" style="font-weight:300;">Click on a route segment to see that day's blog post 📍</small>
 			<?php
-			echo do_shortcode( $osm->shortcode_all( 450 ) );
+			// echo do_shortcode( $osm->shortcode_all( 450 ) );
 			?>
 		</div>
 		<p class="venmo-text text-center pt-3">Help the Wheelie Babes stay fueled by <a href="https://venmo.com/?txn=pay&audience=friends&recipients=svenericson@gmail.com&amount=5.00&note=Wheelie%20Babes%20Breakfast%20Sandwich" target="_blank" rel="noopener noreferrer">buying them a breakfast sandwich</a>!</p>
@@ -90,7 +90,7 @@ $post_excerpt_length = $fields['post_excerpt_length']
 										<span>
 											<?php echo esc_html( strtoupper( $start_loc ) . ' to ' . strtoupper( $end_loc ) ); ?>
 										</span>
-									<?php }; ?> 
+									<?php } ?> 
 								</h4>
 
 								<p class="card-text mt-2">

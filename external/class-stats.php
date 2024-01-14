@@ -118,7 +118,7 @@ class Stats {
 					$elev_loss += intval( $stats['elevation_loss'] );
 					$flats     += intval( $stats['flats'] );
 
-					$riding_days++;
+					++$riding_days;
 				}
 			}
 		}

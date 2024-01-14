@@ -9,8 +9,8 @@
  * @autor       Babobski
  */
 
-$bs_wp        = new BsWp();
-$osm          = new OSM_Custom();
+$bs_wp = new BsWp();
+// $osm          = new OSM_Custom();
 $post_content = new Post_Content();
 
 $bs_wp->get_template_parts(
@@ -47,16 +47,7 @@ $bs_wp->get_template_parts(
 			$end_day_number = $fields['end_day_number'];
 		}
 
-		if ( ! empty( $day_number ) && ! $rest_day && $osm->gpx_file_exists( $day_number ) ) {
-			?>
-			<div class="row mt-5">
-				<div class="osm-wrapper col-12 col-lg-10 offset-lg-1">
-					<?php
-					echo do_shortcode( $osm->shortcode( $osm->make_gpx_filename( $day_number ), 300 ) );
-					?>
-				</div>
-			</div>
-		<?php } ?>
+		?>
 
 		<div id="single-post-stats-bar" class="row mt-5 mb-3">
 			<div class="col-12 col-lg-10 offset-lg-1">
